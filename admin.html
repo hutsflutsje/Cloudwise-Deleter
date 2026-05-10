@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beheer | Michiel fikst't</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: var(--primary-color); color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        .status-wachtend { color: #856404; background-color: #fff3cd; padding: 5px; border-radius: 3px; }
+        .status-goedgekeurd { color: #155724; background-color: #d4edda; padding: 5px; border-radius: 3px; }
+        .actions { display: flex; gap: 5px; }
+        .btn-small { padding: 5px 10px; font-size: 0.8rem; }
+        .btn-approve { background-color: #27ae60; }
+        .btn-delete { background-color: #c0392b; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo-wrapper">
+                <h1 class="logo-text">Beheer - Michiel fikst't</h1>
+                <div class="hammer-tool">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M19.5,2H22V9H19.5L15,13.5V16L12,19L11,18L8,21L3,16L4,15L7,18L10,15L9,14V11.5L13.5,7V4.5L18,0L19.5,2Z" />
+                    </svg>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Terug naar Website</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h2>Afspraken Beheren</h2>
+        <div id="no-appointments" style="display:none;">Geen afspraken gevonden.</div>
+        <table id="appointments-table">
+            <thead>
+                <tr>
+                    <th>Datum</th>
+                    <th>Naam</th>
+                    <th>Contact</th>
+                    <th>Apparaat</th>
+                    <th>Type</th>
+                    <th>Bericht</th>
+                    <th>Status</th>
+                    <th>Acties</th>
+                </tr>
+            </thead>
+            <tbody id="appointments-list">
+                <!-- Appointments will be loaded here -->
+            </tbody>
+        </table>
+    </main>
+
+    <script>
+        function loadAppointments() {
+            const list = document.getElementById('appointments-list');
+            const noApps = document.getElementById('no-appointments');
+            const table = document.getElementById('appointments-table');
+            const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+
+            if (appointments.length === 0) {
+                noApps.style.display = 'block';
+                table.style.display = 'none';
+                return;
+            }
+
+            noApps.style.display = 'none';
+            table.style.display = 'table';
+            list.innerHTML = '';
+
+            appointments.forEach(app => {
+                const tr = document.createElement('tr');
+
+                // Safe way to insert user data
+                const createCell = (text) => {
+                    const td = document.createElement('td');
+                    td.textContent = text || '-';
+                    return td;
+                };
+
+                tr.appendChild(createCell(app.date));
+                tr.appendChild(createCell(app.name));
+                tr.appendChild(createCell(app.contact));
+                tr.appendChild(createCell(app.device));
+                tr.appendChild(createCell(app.service_type === 'thuis' ? 'Bij klant' : 'Franklin Rooseveltlaan'));
+                tr.appendChild(createCell(app.message));
+
+                const statusTd = document.createElement('td');
+                const statusSpan = document.createElement('span');
+                statusSpan.className = `status-${app.status}`;
+                statusSpan.textContent = app.status;
+                statusTd.appendChild(statusSpan);
+                tr.appendChild(statusTd);
+
+                const actionsTd = document.createElement('td');
+                actionsTd.className = 'actions';
+
+                if (app.status === 'wachtend') {
+                    const approveBtn = document.createElement('button');
+                    approveBtn.className = 'btn btn-small btn-approve';
+                    approveBtn.textContent = 'Goedkeuren';
+                    approveBtn.onclick = () => approveApp(app.id);
+                    actionsTd.appendChild(approveBtn);
+                }
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'btn btn-small btn-delete';
+                deleteBtn.textContent = 'Verwijderen';
+                deleteBtn.onclick = () => deleteApp(app.id);
+                actionsTd.appendChild(deleteBtn);
+
+                tr.appendChild(actionsTd);
+                list.appendChild(tr);
+            });
+        }
+
+        function approveApp(id) {
+            let appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+            appointments = appointments.map(app => {
+                if (app.id === id) app.status = 'goedgekeurd';
+                return app;
+            });
+            localStorage.setItem('appointments', JSON.stringify(appointments));
+            loadAppointments();
+        }
+
+        function deleteApp(id) {
+            if (confirm('Weet je zeker dat je deze afspraak wilt verwijderen?')) {
+                let appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+                appointments = appointments.filter(app => app.id !== id);
+                localStorage.setItem('appointments', JSON.stringify(appointments));
+                loadAppointments();
+            }
+        }
+
+        window.onload = loadAppointments;
+    </script>
+</body>
+</html>

