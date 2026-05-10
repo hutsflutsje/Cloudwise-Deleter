@@ -15,7 +15,7 @@
                     <li><a href="#diensten">Diensten</a></li>
                     <li><a href="#over-mij">Over Mij</a></li>
                     <li><a href="#locatie">Locatie</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#contact">Afspraak Maken</a></li>
                 </ul>
             </nav>
         </div>
@@ -25,6 +25,7 @@
         <div class="container">
             <h2>Jouw expert in reparatie in Breda</h2>
             <p>Van kapotte e-bikes tot weigerende elektronica: Michiel fikst 't!</p>
+            <p><strong>Slechts €9 per uur!</strong></p>
             <a href="#contact" class="btn">Maak een afspraak</a>
         </div>
     </section>
@@ -32,6 +33,7 @@
     <section id="diensten">
         <div class="container">
             <h2>Onze Diensten</h2>
+            <p>Ik reken een vast tarief van <strong>€9 per uur</strong> voor al mijn reparatiewerkzaamheden.</p>
             <div class="services-grid">
                 <div class="service-card">
                     <h3>Elektronica Reparatie</h3>
@@ -42,8 +44,8 @@
                     <p>Problemen met de motor, accu of display van je elektrische fiets? Ik zorg dat je snel weer de weg op kunt.</p>
                 </div>
                 <div class="service-card">
-                    <h3>Onderhoud</h3>
-                    <p>Voorkom problemen door regelmatig onderhoud aan je apparatuur of e-bike.</p>
+                    <h3>Service aan huis</h3>
+                    <p>Geen tijd om langs te komen? Geen probleem, ik kan ook bij jou langskomen in Breda!</p>
                 </div>
             </div>
         </div>
@@ -52,46 +54,90 @@
     <section id="over-mij" class="bg-light">
         <div class="container">
             <h2>Over Michiel</h2>
-            <p>Hoi, ik ben Michiel. Met een passie voor techniek en jarenlange ervaring help ik mensen in Breda en omstreken met het repareren van hun dierbare apparaten en e-bikes. Eerlijk advies en een snelle service staan bij mij voorop.</p>
+            <p>Hoi, ik ben Michiel. Ik ben 13 jaar oud en heb een enorme passie voor techniek. Met mijn ervaring help ik mensen in Breda en omstreken met het repareren van hun dierbare apparaten en e-bikes. Eerlijk advies en een snelle service voor een scherpe prijs staan bij mij voorop.</p>
         </div>
     </section>
 
     <section id="locatie">
         <div class="container">
             <h2>Locatie</h2>
-            <p>Je vindt Michiel fikst't in het hartje van Breda. Kom gerust langs of neem contact op voor het adres.</p>
+            <p>Je kunt bij mij langskomen op de <strong>Franklin Rooseveltlaan 90, Breda</strong>. Maar zoals gezegd: ik kom ook graag naar jou toe!</p>
             <div class="map-placeholder">
-                <p>📍 Breda, Nederland</p>
+                <p>📍 Franklin Rooseveltlaan 90, Breda, Nederland</p>
             </div>
         </div>
     </section>
 
     <section id="contact">
         <div class="container">
-            <h2>Contact</h2>
-            <p>Heb je een vraag of wil je direct iets laten repareren? Neem contact met me op!</p>
-            <form id="contact-form">
+            <h2>Afspraak Maken</h2>
+            <p>Vul het formulier hieronder in om een afspraak aan te vragen. Ik neem zo snel mogelijk contact met je op om de afspraak te bevestigen.</p>
+            <form id="appointment-form">
                 <div class="form-group">
                     <label for="name">Naam:</label>
                     <input type="text" id="name" name="name" required>
                 </div>
                 <div class="form-group">
-                    <label for="email">E-mail:</label>
-                    <input type="email" id="email" name="email" required>
+                    <label for="email">E-mail of Telefoon:</label>
+                    <input type="text" id="contact_info" name="contact_info" required>
                 </div>
                 <div class="form-group">
-                    <label for="message">Bericht:</label>
-                    <textarea id="message" name="message" required></textarea>
+                    <label for="device">Wat moet er gefikst worden?</label>
+                    <input type="text" id="device" name="device" placeholder="Bijv. Laptop, E-bike accu..." required>
                 </div>
-                <button type="submit" class="btn">Verstuur</button>
+                <div class="form-group">
+                    <label for="service_type">Type Service:</label>
+                    <select id="service_type" name="service_type">
+                        <option value="werkplaats">Ik kom naar de Franklin Rooseveltlaan</option>
+                        <option value="thuis">Michiel komt naar mij toe</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="message">Bericht / Toelichting:</label>
+                    <textarea id="message" name="message"></textarea>
+                </div>
+                <button type="submit" class="btn">Afspraak Aanvragen</button>
             </form>
+            <div id="form-feedback" style="display:none; margin-top: 20px; padding: 15px; border-radius: 5px; background: #d4edda; color: #155724;">
+                Bedankt! Je aanvraag is verstuurd. Ik neem snel contact met je op.
+            </div>
+            <div class="disclaimer" style="margin-top: 30px; font-size: 0.8rem; color: #777; border-top: 1px solid #ddd; padding-top: 10px;">
+                <p><em>Let op: Dit is een prototype van het afsprakensysteem. In een echte website zouden deze gegevens direct naar Michiel worden gestuurd via e-mail of een database. Voor een werkende oplossing raad ik een service zoals <a href="https://formspree.io/" target="_blank">Formspree</a> aan.</em></p>
+            </div>
         </div>
     </section>
 
     <footer>
         <div class="container">
             <p>&copy; 2024 Michiel fikst't. Alle rechten voorbehouden.</p>
+            <p><small><a href="admin.html" style="color:rgba(255,255,255,0.3); text-decoration:none;">Beheer</a></small></p>
         </div>
     </footer>
+
+    <script>
+        document.getElementById('appointment-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const appointment = {
+                id: Date.now(),
+                name: document.getElementById('name').value,
+                contact: document.getElementById('contact_info').value,
+                device: document.getElementById('device').value,
+                service_type: document.getElementById('service_type').value,
+                message: document.getElementById('message').value,
+                status: 'wachtend',
+                date: new Date().toLocaleString()
+            };
+
+            // Get existing appointments
+            let appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+            appointments.push(appointment);
+            localStorage.setItem('appointments', JSON.stringify(appointments));
+
+            // Show feedback
+            document.getElementById('appointment-form').style.display = 'none';
+            document.getElementById('form-feedback').style.display = 'block';
+        });
+    </script>
 </body>
 </html>
