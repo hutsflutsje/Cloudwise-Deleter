@@ -11,8 +11,11 @@ let isListeningWakeWord = false;
 let isSpeechActive = false;
 let ttsVoice = null;
 
-// API Base URL
-const API_BASE = "";
+// Dynamic API Base URL detection
+let API_BASE = "";
+if (window.location.protocol === "file:" || !window.location.host) {
+    API_BASE = "http://localhost:8000";
+}
 
 // Initialize application on DOM ready
 document.addEventListener("DOMContentLoaded", () => {
@@ -44,10 +47,12 @@ function initClock() {
    ========================================================================== */
 function initStatsPolling() {
     async function fetchStats() {
+        const warningBanner = document.getElementById("backend-warning-banner");
         try {
             const res = await fetch(`${API_BASE}/api/stats`);
             if (res.ok) {
                 const data = await res.json();
+                if (warningBanner) warningBanner.classList.add("hidden");
 
                 // CPU
                 document.getElementById("cpu-percent-text").textContent = `${data.cpu_percent}%`;
@@ -66,9 +71,12 @@ function initStatsPolling() {
                 document.getElementById("uptime-text").textContent = data.uptime_formatted;
                 document.getElementById("processed-cmd-text").textContent = data.processed_commands;
                 document.getElementById("platform-badge").textContent = `${data.platform} ${data.platform_release}`;
+            } else {
+                if (warningBanner) warningBanner.classList.remove("hidden");
             }
         } catch (err) {
             console.error("Stats polling error:", err);
+            if (warningBanner) warningBanner.classList.remove("hidden");
         }
     }
 
@@ -241,12 +249,29 @@ function initSpeechRecognition() {
 
     speechRecognition.onerror = (event) => {
         console.warn("Speech recognition error:", event.error);
+
+        // If permission is blocked/denied, deactivate wake word mode to stop permission popup spam
+        if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+            if (isListeningWakeWord) {
+                isListeningWakeWord = false;
+                const indicator = document.getElementById("wake-indicator");
+                const statusText = document.getElementById("wake-status-text");
+                if (indicator) indicator.className = "w-2.5 h-2.5 rounded-full bg-slate-500";
+                if (statusText) statusText.innerHTML = 'Wake-word ("Hey CYBER"): <strong class="text-red-400">GEBLOKKEERD</strong>';
+                setCyberStatus("MIC TOEGANG GEWEIGERD", false);
+                alert("Microfoontoegang is geweigerd door uw browser. Sta microfoon toe in uw browserinstellingen om spraakbesturing te gebruiken.");
+            }
+        }
     };
 
     speechRecognition.onend = () => {
         if (isListeningWakeWord) {
-            // Automatically restart if continuous wake word mode is active
-            try { speechRecognition.start(); } catch(e) {}
+            // Debounce/delay restart slightly to avoid high-frequency looping on error
+            setTimeout(() => {
+                if (isListeningWakeWord) {
+                    try { speechRecognition.start(); } catch(e) {}
+                }
+            }, 1000);
         }
     };
 }

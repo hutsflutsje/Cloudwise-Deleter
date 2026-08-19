@@ -103,6 +103,12 @@
 </head>
 <body class="flex flex-col min-h-screen select-none">
 
+    <!-- BACKEND DISCONNECTED WARNING BANNER -->
+    <div id="backend-warning-banner" class="bg-amber-950/90 border-b border-amber-500/50 text-amber-200 px-4 py-2 text-xs font-mono text-center flex items-center justify-center gap-2 hidden z-50">
+        <i class="fa-solid fa-triangle-exclamation text-amber-400 text-sm animate-pulse"></i>
+        <span><strong>Geen verbinding met CYBER Python Backend!</strong> Zorg dat <code class="bg-black/50 px-1.5 py-0.5 rounded text-amber-300">python app.py</code> draait en open de app via <a href="http://localhost:8000" class="underline text-cyber-cyan hover:text-white font-bold">http://localhost:8000</a>.</span>
+    </div>
+
     <!-- TOP BAR -->
     <header class="glass-panel sticky top-0 z-40 px-6 py-3 border-b border-cyber-darkBorder flex items-center justify-between">
         <div class="flex items-center space-x-4">
