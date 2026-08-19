@@ -89,11 +89,12 @@ function initStatsPolling() {
    ========================================================================== */
 async function fetchWeather() {
     const cityInput = localStorage.getItem("CYBER_WEATHER_CITY") || "Amsterdam";
+    const weatherKey = localStorage.getItem("CYBER_WEATHER_KEY") || "";
     try {
         const res = await fetch(`${API_BASE}/api/weather`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ city: cityInput })
+            body: JSON.stringify({ city: cityInput, api_key: weatherKey })
         });
         if (res.ok) {
             const data = await res.json();
@@ -166,6 +167,7 @@ async function captureSnapshotAndAnalyze() {
     // Animate CYBER core ring
     setCyberStatus("ANALYZING IMAGE...", true);
 
+    const geminiKey = localStorage.getItem("CYBER_GEMINI_KEY") || "";
     try {
         const res = await fetch(`${API_BASE}/api/chat`, {
             method: "POST",
@@ -173,7 +175,8 @@ async function captureSnapshotAndAnalyze() {
             body: JSON.stringify({
                 message: "Wat zie je op dit beeld? Geef een beknopte analyse.",
                 history: chatHistory,
-                image: base64Image
+                image: base64Image,
+                api_key: geminiKey
             })
         });
 
@@ -224,24 +227,34 @@ function initSpeechRecognition() {
             document.getElementById("speech-transcript-preview").textContent = `"${previewText}"`;
         }
 
-        // Check for Wake-Word Trigger "Hey CYBER" / "CYBER"
+        // Check for Wake-Word Trigger "Hey CYBER" / "Word wakker" / "CYBER"
         const cleanText = (finalTranscript || interimTranscript).toLowerCase();
-        if (cleanText.includes("hey cyber") || cleanText.includes("cyber") || cleanText.includes("jarvis")) {
+        if (
+            cleanText.includes("hey cyber") ||
+            cleanText.includes("cyber") ||
+            cleanText.includes("jarvis") ||
+            cleanText.includes("word wakker") ||
+            cleanText.includes("wordt wakker") ||
+            cleanText.includes("wakker worden")
+        ) {
             setCyberStatus("WAKE WORD DETECTED!", true);
 
             if (finalTranscript) {
-                // Strip trigger word
+                // Strip trigger words
                 let cleanedQuery = finalTranscript
                     .replace(/hey cyber/gi, '')
                     .replace(/cyber/gi, '')
                     .replace(/jarvis/gi, '')
+                    .replace(/wordt wakker/gi, '')
+                    .replace(/word wakker/gi, '')
+                    .replace(/wakker worden/gi, '')
                     .trim();
 
                 if (cleanedQuery.length > 0) {
                     processUserQuery(cleanedQuery);
                 } else {
-                    speakText("Ja, ik luister. Hoe kan ik u helpen?");
-                    appendCyberMessage("Ik luister. Wat kan ik voor u doen?");
+                    speakText("Ja, ik ben wakker en luister. Hoe kan ik u helpen?");
+                    appendCyberMessage("CYBER is wakker en luistert. Wat kan ik voor u doen?");
                 }
             }
         }
@@ -257,7 +270,7 @@ function initSpeechRecognition() {
                 const indicator = document.getElementById("wake-indicator");
                 const statusText = document.getElementById("wake-status-text");
                 if (indicator) indicator.className = "w-2.5 h-2.5 rounded-full bg-slate-500";
-                if (statusText) statusText.innerHTML = 'Wake-word ("Hey CYBER"): <strong class="text-red-400">GEBLOKKEERD</strong>';
+                if (statusText) statusText.innerHTML = 'Wake-word ("Hey CYBER" / "Word wakker"): <strong class="text-red-400">GEBLOKKEERD</strong>';
                 setCyberStatus("MIC TOEGANG GEWEIGERD", false);
                 alert("Microfoontoegang is geweigerd door uw browser. Sta microfoon toe in uw browserinstellingen om spraakbesturing te gebruiken.");
             }
@@ -289,13 +302,13 @@ function toggleWakeWordListener() {
         isListeningWakeWord = false;
         try { speechRecognition.stop(); } catch(e) {}
         indicator.className = "w-2.5 h-2.5 rounded-full bg-slate-500";
-        statusText.innerHTML = 'Wake-word ("Hey CYBER"): <strong class="text-slate-400">UIT</strong>';
+        statusText.innerHTML = 'Wake-word ("Hey CYBER" / "Word wakker"): <strong class="text-slate-400">UIT</strong>';
         setCyberStatus("CYBER IDLE", false);
     } else {
         isListeningWakeWord = true;
         try { speechRecognition.start(); } catch(e) {}
         indicator.className = "w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping";
-        statusText.innerHTML = 'Wake-word ("Hey CYBER"): <strong class="text-emerald-400">ACTIEF</strong>';
+        statusText.innerHTML = 'Wake-word ("Hey CYBER" / "Word wakker"): <strong class="text-emerald-400">ACTIEF</strong>';
         setCyberStatus("LISTENING...", true);
     }
 }
@@ -394,13 +407,15 @@ async function processUserQuery(query) {
 
     setCyberStatus("PROCESSING...", true);
 
+    const geminiKey = localStorage.getItem("CYBER_GEMINI_KEY") || "";
     try {
         const res = await fetch(`${API_BASE}/api/chat`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 message: query,
-                history: chatHistory
+                history: chatHistory,
+                api_key: geminiKey
             })
         });
 
@@ -705,6 +720,11 @@ function showToolResult(title, content) {
    10. MODAL MANAGEMENT & HELPERS
    ========================================================================== */
 function openModal(modalId) {
+    if (modalId === "settings-modal") {
+        document.getElementById("gemini-key-input").value = localStorage.getItem("CYBER_GEMINI_KEY") || "";
+        document.getElementById("weather-key-input").value = localStorage.getItem("CYBER_WEATHER_KEY") || "";
+        document.getElementById("weather-city-input").value = localStorage.getItem("CYBER_WEATHER_CITY") || "Amsterdam";
+    }
     document.getElementById(modalId).classList.remove("hidden");
 }
 
@@ -717,6 +737,18 @@ function saveSettings() {
     const weatherKey = document.getElementById("weather-key-input").value.trim();
     const weatherCity = document.getElementById("weather-city-input").value.trim();
     const voiceSelect = document.getElementById("tts-voice-select").value;
+
+    if (geminiKey) {
+        localStorage.setItem("CYBER_GEMINI_KEY", geminiKey);
+    } else {
+        localStorage.removeItem("CYBER_GEMINI_KEY");
+    }
+
+    if (weatherKey) {
+        localStorage.setItem("CYBER_WEATHER_KEY", weatherKey);
+    } else {
+        localStorage.removeItem("CYBER_WEATHER_KEY");
+    }
 
     if (weatherCity) {
         localStorage.setItem("CYBER_WEATHER_CITY", weatherCity);

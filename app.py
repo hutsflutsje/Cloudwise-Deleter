@@ -110,6 +110,7 @@ class ChatRequest(BaseModel):
     message: str
     history: Optional[List[Dict[str, str]]] = []
     image: Optional[str] = None  # Base64 string if camera snapshot included
+    api_key: Optional[str] = None
 
 class CodeExecuteRequest(BaseModel):
     code: str
@@ -125,13 +126,15 @@ class AddCommandRequest(BaseModel):
 
 class YouTubeRequest(BaseModel):
     url: str
+    api_key: Optional[str] = None
 
 class WeatherRequest(BaseModel):
     city: Optional[str] = "Amsterdam"
+    api_key: Optional[str] = None
 
 # Gemini Config Helper
-def get_gemini_model():
-    api_key = os.getenv("GEMINI_API_KEY")
+def get_gemini_model(api_key_override: Optional[str] = None):
+    api_key = api_key_override or os.getenv("GEMINI_API_KEY")
     if not api_key or not genai:
         return None
     try:
@@ -175,7 +178,7 @@ def chat_with_cyber(req: ChatRequest):
     PROCESSED_COMMANDS += 1
 
     user_msg = req.message
-    model = get_gemini_model()
+    model = get_gemini_model(req.api_key)
 
     system_prompt = (
         "Je bent CYBER, een hyper-geavanceerde AI-assistent geïnspireerd op J.A.R.V.I.S. "
@@ -223,17 +226,23 @@ def chat_with_cyber(req: ChatRequest):
 def generate_smart_fallback(msg: str) -> str:
     msg_lower = msg.lower()
     if "status" in msg_lower or "systeem" in msg_lower or "stats" in msg_lower:
-        return "Systeemanalyse voltooid. Alle kernmodules werken op optimale capaciteit. CPU en RAM-belasting zijn binnen normale waarden."
+        return "Systeemanalyse voltooid: Alle kernmodules functioneren nominaal. Bekijk het System Stats paneel voor actuele CPU en RAM-metingen."
     elif "weer" in msg_lower or "weather" in msg_lower:
-        return "Weerinformatie opgehaald via de CYBER-satellietverbinding. Raadpleeg de Weather Widget in uw dashboard voor details."
-    elif "code" in msg_lower or "python" in msg_lower or "commando" in msg_lower:
-        return "CYBER is gereed voor code-executie en systeembeheer. Gebruik het Code-panel of vraag mij specifiek om een commando toe te voegen!"
-    elif "wie ben jij" in msg_lower or "wie ben je" in msg_lower or "cyber" in msg_lower or "jarvis" in msg_lower:
-        return "Ik ben CYBER, uw persoonlijke AI-assistent geïnspireerd op J.A.R.V.I.S. Ik beheer uw systeem, voer code uit en analyseer visuele en auditieve input."
-    elif "hallo" in msg_lower or "hey" in msg_lower or "hoi" in msg_lower:
+        return "De weersomstandigheden worden weergegeven op uw Weather Widget in het dashboard."
+    elif "code" in msg_lower or "python" in msg_lower:
+        return "Het Code Execution & Systeembeheer paneel is gereed. Voer uw Python code of commando direct uit."
+    elif "commando" in msg_lower or "command" in msg_lower:
+        return "U kunt nieuwe systeemcommando's toevoegen via de '+ Commando' knop bovenaan het dashboard."
+    elif "wie ben jij" in msg_lower or "wie ben je" in msg_lower or "wat ben je" in msg_lower:
+        return "Ik ben CYBER, uw geavanceerde AI-assistent geïnspireerd op J.A.R.V.I.S. Ik sta voor u klaar voor spraakbesturing, visie-analyse en systeembeheer."
+    elif any(greeting in msg_lower for greeting in ["hallo", "hey", "hoi", "goedendag", "goedenavond", "goedenmorgen"]):
         return "Goedendag. CYBER staat tot uw dienst. Hoe kan ik u vandaag assisteren?"
+    elif "hoe gaat" in msg_lower or "alles goed" in msg_lower:
+        return "Systeemstatus is 100% operationeel. Ik ben gereed om al uw opdrachten uit te voeren."
+    elif "bedankt" in msg_lower or "dankje" in msg_lower or "dank u" in msg_lower:
+        return "Graag gedaan! Ik sta altijd paraat als u verdere ondersteuning nodig heeft."
     else:
-        return f"CYBER ontvangt u: '{msg}'. Systeem status is nominaal. Om volledige Gemini AI-kracht te benutten, kunt u uw GEMINI_API_KEY instellen in de instellingen."
+        return f"Begrepen. Opdracht '{msg}' ontvangen. Systeem is operationeel en luistert naar uw vervolgcommando's."
 
 @app.post("/api/execute-code")
 def execute_code(req: CodeExecuteRequest):
@@ -423,7 +432,7 @@ def summarize_youtube(req: YouTubeRequest):
 @app.post("/api/weather")
 def get_weather(req: WeatherRequest):
     city = req.city or "Amsterdam"
-    api_key = os.getenv("OPENWEATHER_API_KEY")
+    api_key = req.api_key or os.getenv("OPENWEATHER_API_KEY")
 
     if api_key:
         try:
