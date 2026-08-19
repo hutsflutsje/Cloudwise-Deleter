@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+psutil
+pypdf
+youtube-transcript-api
+requests
+google-generativeai
+python-dotenv
+python-multipart

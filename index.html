@@ -1,131 +1,574 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl" class="dark">
 <head>
     <meta charset="UTF-8">
-    <title>CloudWise Uninstaller</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBER | J.A.R.V.I.S AI Assistent</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            bg: '#0b0f19',
+                            card: 'rgba(15, 23, 42, 0.75)',
+                            cyan: '#00f0ff',
+                            blue: '#38bdf8',
+                            darkBorder: 'rgba(0, 240, 255, 0.25)',
+                            accent: '#0284c7'
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'spin-slow': 'spin 12s linear infinite'
+                    },
+                    keyframes: {
+                        glow: {
+                            '0%': { boxShadow: '0 0 10px rgba(0,240,255,0.3)' },
+                            '100%': { boxShadow: '0 0 25px rgba(0,240,255,0.8), 0 0 5px rgba(56,189,248,0.5)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS for Glassmorphism & Cyber animations -->
     <style>
-        body { background: #f5f5f5; color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
-        @keyframes strobe { 0% { background-color: #000; } 33% { background-color: #f00; } 66% { background-color: #fff; } 100% { background-color: #000; } }
-        .flash-active { animation: strobe 0.1s infinite; }
-        #box { border: 1px solid #ddd; padding: 40px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 500px; color: #333; border-radius: 8px; }
-        h1 { font-weight: bold; margin: 0 0 10px 0; font-size: 1.8rem; color: #2c3e50; }
-        p { margin: 5px 0; font-size: 0.95rem; color: #555; }
-        .info-section { background: #ecf0f1; padding: 15px; border-radius: 5px; margin: 15px 0; text-align: left; }
-        button { background: #e74c3c; color: #fff; border: none; padding: 12px 20px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1.1rem; border-radius: 5px; margin-top: 20px; transition: background 0.3s; }
-        button:hover { background: #c0392b; }
-        .progress-bar { width: 100%; height: 20px; background: #ecf0f1; border-radius: 3px; margin: 10px 0; overflow: hidden; }
-        .progress-fill { height: 100%; background: #27ae60; width: 0%; }
+        body {
+            background-color: #0b0f19;
+            background-image:
+                radial-gradient(at 0% 0%, rgba(0, 240, 255, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(56, 189, 248, 0.08) 0px, transparent 50%),
+                linear-gradient(to bottom, rgba(11, 15, 25, 0.95), rgba(11, 15, 25, 0.98));
+            color: #e2e8f0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism Cards */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        }
+
+        .glass-panel:hover {
+            border-color: rgba(0, 240, 255, 0.4);
+        }
+
+        /* Cyber Ring Animations */
+        .audio-ring-outer {
+            border: 2px dashed rgba(0, 240, 255, 0.4);
+            animation: spin-slow 20s linear infinite;
+        }
+
+        .audio-ring-inner {
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.4), inset 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+
+        .audio-ring-listening {
+            animation: pulse-glow 1.5s infinite alternate;
+        }
+
+        @keyframes pulse-glow {
+            0% { transform: scale(0.98); box-shadow: 0 0 15px rgba(0,240,255,0.4); }
+            100% { transform: scale(1.05); box-shadow: 0 0 45px rgba(0,240,255,0.9); }
+        }
+
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(11, 15, 25, 0.8);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 240, 255, 0.3);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 240, 255, 0.6);
+        }
     </style>
 </head>
-<body id="mainBody">
+<body class="flex flex-col min-h-screen select-none">
 
-<div id="box">
-    <h1>🔧 CloudWise Uninstaller</h1>
-    <p>Versie 2.1.4</p>
-    <div class="info-section">
-        <p><strong>Applicatie:</strong> CloudWise Sync Manager</p>
-        <p><strong>Grootte:</strong> 247 MB</p>
-        <p><strong>Status:</strong> Geïnstalleerd</p>
+    <!-- BACKEND DISCONNECTED WARNING BANNER -->
+    <div id="backend-warning-banner" class="bg-amber-950/90 border-b border-amber-500/50 text-amber-200 px-4 py-2 text-xs font-mono text-center flex items-center justify-center gap-2 hidden z-50">
+        <i class="fa-solid fa-triangle-exclamation text-amber-400 text-sm animate-pulse"></i>
+        <span><strong>Geen verbinding met CYBER Python Backend!</strong> Zorg dat <code class="bg-black/50 px-1.5 py-0.5 rounded text-amber-300">python app.py</code> draait en open de app via <a href="http://localhost:8000" class="underline text-cyber-cyan hover:text-white font-bold">http://localhost:8000</a>.</span>
     </div>
-    <p style="text-align: center; margin-top: 20px;">Klik de knop hieronder om CloudWise volledig te verwijderen:</p>
-    <button onclick="check()">KLIK HIER OM CLOUDWISE TE VERWIJDEREN</button>
-</div>
 
-<script>
-    const sound = new Audio("https://www.myinstants.com/media/sounds/nggr.mp3");
-    sound.loop = true;
+    <!-- TOP BAR -->
+    <header class="glass-panel sticky top-0 z-40 px-6 py-3 border-b border-cyber-darkBorder flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+            <div class="relative flex items-center justify-center w-10 h-10 rounded-lg bg-cyan-950/60 border border-cyber-cyan text-cyber-cyan">
+                <i class="fa-solid fa-microchip text-xl animate-pulse"></i>
+            </div>
+            <div>
+                <h1 class="text-xl font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-cyber-cyan to-cyber-blue font-mono">
+                    J.A.R.V.I.S <span class="text-xs text-cyber-cyan font-normal uppercase tracking-normal px-2 py-0.5 rounded bg-cyber-cyan/10 border border-cyber-cyan/30">CYBER OS v1.0</span>
+                </h1>
+                <p class="text-xs text-slate-400 flex items-center gap-2">
+                    <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span id="status-text" class="text-emerald-400 font-medium">Systeem Online & Actief</span>
+                </p>
+            </div>
+        </div>
 
-    let cameraWins = [];
-    let normalWins = [];
+        <!-- Clock & Controls -->
+        <div class="flex items-center space-x-6">
+            <div class="hidden md:flex flex-col text-right font-mono">
+                <span id="live-time" class="text-lg font-bold text-cyber-cyan tracking-wider">00:00:00</span>
+                <span id="live-date" class="text-xs text-slate-400">---, 00 --- ----</span>
+            </div>
 
-    function check() {
-        startChaos();
-    }
+            <div class="flex items-center space-x-2">
+                <button onclick="openModal('tools-modal')" class="px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-cyber-cyan/20 border border-cyber-cyan/30 text-xs font-mono text-cyber-cyan transition flex items-center gap-1.5" title="Document & Media Tools">
+                    <i class="fa-solid fa-file-lines"></i>
+                    <span class="hidden sm:inline">Tools & Docs</span>
+                </button>
+                <button onclick="openModal('cmd-modal')" class="px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-cyber-cyan/20 border border-cyber-cyan/30 text-xs font-mono text-cyber-cyan transition flex items-center gap-1.5" title="Nieuw Commando Toevoegen">
+                    <i class="fa-solid fa-terminal"></i>
+                    <span class="hidden sm:inline">+ Commando</span>
+                </button>
+                <button onclick="openModal('settings-modal')" class="p-2 rounded-lg bg-slate-800/80 hover:bg-cyber-cyan/20 border border-cyber-cyan/30 text-cyber-cyan transition" title="Instellingen">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+            </div>
+        </div>
+    </header>
 
-    function startChaos() {
-        sound.play();
-        document.getElementById('mainBody').classList.add('flash-active');
-        smartSpawn();
-        setInterval(smartSpawn, 3000);
-    }
+    <!-- MAIN DASHBOARD CONTENT (3-COLUMN LAYOUT) -->
+    <main class="flex-1 p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-    function smartSpawn() {
-        cameraWins = cameraWins.filter(w => !w.closed);
-        normalWins = normalWins.filter(w => !w.closed);
-        if (cameraWins.length < 5) spawn(true);
-        else if (normalWins.length < 10) spawn(false);
-    }
+        <!-- LINKER KOLOM (Widget Panel - 3/12) -->
+        <section class="lg:col-span-3 flex flex-col gap-5">
 
-    function spawn(isCamera) {
-        const w = 350, h = 300;
-        let curX = Math.floor(Math.random() * (screen.availWidth - w));
-        let curY = Math.floor(Math.random() * (screen.availHeight - h));
+            <!-- SYSTEM STATS WIDGET -->
+            <div class="glass-panel rounded-xl p-4 flex flex-col gap-3">
+                <div class="flex items-center justify-between border-b border-slate-700/50 pb-2">
+                    <h2 class="text-xs font-mono font-bold tracking-wider text-cyber-cyan flex items-center gap-2">
+                        <i class="fa-solid fa-chart-simple"></i> SYSTEM STATS
+                    </h2>
+                    <span class="text-[10px] font-mono text-slate-400" id="platform-badge">PC</span>
+                </div>
 
-        const win = window.open("", "", `width=${w},height=${h},left=${curX},top=${curY}`);
+                <!-- CPU Progress -->
+                <div>
+                    <div class="flex justify-between text-xs font-mono mb-1">
+                        <span class="text-slate-300">CPU GEBRUIK</span>
+                        <span id="cpu-percent-text" class="text-cyber-cyan font-bold">0%</span>
+                    </div>
+                    <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden border border-slate-700">
+                        <div id="cpu-bar" class="bg-gradient-to-r from-cyber-blue to-cyber-cyan h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
 
-        if (win) {
-            win.document.write(`
-                <html>
-                <head>
-                    <style>
-                        @keyframes strobe { 0% { background:#000; } 50% { background:#f00; } 100% { background:#fff; } }
-                        body { animation: strobe 0.08s infinite; color:white; font-family:sans-serif; text-align:center; overflow:hidden; margin:0; border:10px solid black; }
-                    </style>
-                </head>
-                <body>
-                    ${isCamera ? '<video id="v" autoplay style="width:100%; height:180px; object-fit:cover;"></video>' : '<h1 style="font-size:100px;">💀</h1>'}
-                    <h1>GET HACKED!!</h1>
-                    <script>
-                        ${isCamera ? 'navigator.mediaDevices.getUserMedia({ video: true }).then(s => { document.getElementById("v").srcObject = s; });' : ''}
-                        
-                        // New absolute movement engine
-                        let x = ${curX}, y = ${curY};
-                        let dx = ${Math.random() > 0.5 ? 15 : -15}; 
-                        let dy = ${Math.random() > 0.5 ? 15 : -15};
-                        const width = 350, height = 300;
+                <!-- RAM Progress -->
+                <div>
+                    <div class="flex justify-between text-xs font-mono mb-1">
+                        <span class="text-slate-300">RAM GEBRUIK</span>
+                        <span id="ram-percent-text" class="text-cyber-cyan font-bold">0%</span>
+                    </div>
+                    <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden border border-slate-700">
+                        <div id="ram-bar" class="bg-gradient-to-r from-cyan-500 to-emerald-400 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    <span id="ram-detail-text" class="text-[10px] font-mono text-slate-400 mt-0.5 block">0 GB / 0 GB</span>
+                </div>
 
-                        function bounce() {
-                            x += dx;
-                            y += dy;
+                <!-- DISK Progress -->
+                <div>
+                    <div class="flex justify-between text-xs font-mono mb-1">
+                        <span class="text-slate-300">OPSLAG (DISK)</span>
+                        <span id="disk-percent-text" class="text-cyber-cyan font-bold">0%</span>
+                    </div>
+                    <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden border border-slate-700">
+                        <div id="disk-bar" class="bg-gradient-to-r from-blue-600 to-indigo-400 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
 
-                            // Collision detection with absolute screen bounds
-                            if (x + width >= screen.availWidth || x <= 0) {
-                                dx = -dx;
-                                // Force away from edge to prevent sticking
-                                x = (x <= 0) ? 5 : screen.availWidth - width - 5;
-                            }
-                            if (y + height >= screen.availHeight || y <= 0) {
-                                dy = -dy;
-                                // Force away from edge to prevent sticking
-                                y = (y <= 0) ? 5 : screen.availHeight - height - 5;
-                            }
+            <!-- WEATHER WIDGET -->
+            <div class="glass-panel rounded-xl p-4 flex flex-col gap-3">
+                <div class="flex items-center justify-between border-b border-slate-700/50 pb-2">
+                    <h2 class="text-xs font-mono font-bold tracking-wider text-cyber-cyan flex items-center gap-2">
+                        <i class="fa-solid fa-cloud-sun"></i> WEATHER WIDGET
+                    </h2>
+                    <button onclick="fetchWeather()" class="text-slate-400 hover:text-cyber-cyan text-xs transition">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                    </button>
+                </div>
 
-                            window.moveTo(x, y);
-                        }
-                        
-                        // Start moving after 10 seconds
-                        setTimeout(() => {
-                            // kick once then run repeatedly for smooth motion
-                            bounce();
-                            setInterval(bounce, 10);
-                        }, 10000);
-                    <\/script>
-                </body>
-                </html>
-            `);
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 id="weather-city" class="text-lg font-bold text-white font-mono">Amsterdam</h3>
+                        <p id="weather-desc" class="text-xs text-slate-400">Licht bewolkt</p>
+                    </div>
+                    <div class="text-right font-mono">
+                        <span id="weather-temp" class="text-2xl font-extrabold text-cyber-cyan">--°C</span>
+                    </div>
+                </div>
 
-            if (isCamera) cameraWins.push(win);
-            else normalWins.push(win);
+                <div class="grid grid-cols-2 gap-2 text-xs font-mono pt-2 border-t border-slate-800">
+                    <div class="bg-slate-900/60 p-2 rounded border border-slate-800">
+                        <span class="text-slate-400 block text-[10px]">LUCHTVOCHTIGHEID</span>
+                        <span id="weather-humidity" class="text-slate-200 font-bold">--%</span>
+                    </div>
+                    <div class="bg-slate-900/60 p-2 rounded border border-slate-800">
+                        <span class="text-slate-400 block text-[10px]">WINDSNELHEID</span>
+                        <span id="weather-wind" class="text-slate-200 font-bold">-- km/h</span>
+                    </div>
+                </div>
+            </div>
 
-            const checkClosed = setInterval(() => {
-                if (win.closed) {
-                    clearInterval(checkClosed);
-                    setTimeout(smartSpawn, 100);
-                    setTimeout(smartSpawn, 200);
-                }
-            }, 500);
-        }
-    }
-</script>
+            <!-- CAMERA PREVIEW BOX -->
+            <div class="glass-panel rounded-xl p-4 flex flex-col gap-3">
+                <div class="flex items-center justify-between border-b border-slate-700/50 pb-2">
+                    <h2 class="text-xs font-mono font-bold tracking-wider text-cyber-cyan flex items-center gap-2">
+                        <i class="fa-solid fa-camera"></i> LIVE WEBCAM STREAM
+                    </h2>
+                    <span id="camera-status" class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">UIT</span>
+                </div>
+
+                <div class="relative w-full h-36 bg-black rounded-lg overflow-hidden border border-cyber-cyan/30 flex items-center justify-center group">
+                    <video id="webcam-video" autoplay playsinline class="w-full h-full object-cover hidden"></video>
+                    <div id="webcam-placeholder" class="text-center p-4">
+                        <i class="fa-solid fa-video-slash text-2xl text-slate-600 mb-2 block"></i>
+                        <span class="text-xs text-slate-500 font-mono">Camera is uitgeschakeld</span>
+                    </div>
+
+                    <!-- HUD Overlay line on camera -->
+                    <div class="absolute inset-0 border border-cyber-cyan/20 pointer-events-none"></div>
+                    <div class="absolute top-2 left-2 text-[9px] font-mono text-cyber-cyan/70 bg-black/50 px-1 rounded">CAM-01</div>
+                </div>
+
+                <div class="flex gap-2">
+                    <button id="toggle-cam-btn" onclick="toggleWebcam()" class="flex-1 py-1.5 rounded bg-slate-800 hover:bg-cyber-cyan/20 border border-cyber-cyan/30 text-xs font-mono text-cyber-cyan transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-power-off"></i> Toggle Cam
+                    </button>
+                    <button onclick="captureSnapshotAndAnalyze()" class="px-3 py-1.5 rounded bg-cyber-cyan/20 hover:bg-cyber-cyan/30 border border-cyber-cyan text-xs font-mono text-cyber-cyan transition flex items-center gap-1">
+                        <i class="fa-solid fa-eye"></i> Visie Analyse
+                    </button>
+                </div>
+            </div>
+
+            <!-- SYSTEM UPTIME PANEL -->
+            <div class="glass-panel rounded-xl p-4 flex flex-col gap-2">
+                <div class="flex items-center justify-between border-b border-slate-700/50 pb-2">
+                    <h2 class="text-xs font-mono font-bold tracking-wider text-cyber-cyan flex items-center gap-2">
+                        <i class="fa-solid fa-stopwatch"></i> SYSTEM UPTIME
+                    </h2>
+                </div>
+                <div class="flex justify-between items-center py-1">
+                    <span class="text-xs font-mono text-slate-400">Actieve Sessieduur:</span>
+                    <span id="uptime-text" class="text-sm font-mono font-bold text-cyber-cyan">00:00:00</span>
+                </div>
+                <div class="flex justify-between items-center py-1 border-t border-slate-800">
+                    <span class="text-xs font-mono text-slate-400">Verwerkte Commando's:</span>
+                    <span id="processed-cmd-text" class="text-xs font-mono font-bold text-slate-200">0</span>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- MIDDEN (Spraak Visualiser & Control Center - 5/12) -->
+        <section class="lg:col-span-5 flex flex-col gap-6">
+
+            <!-- SPRAAK VISUALISER CENTER -->
+            <div class="glass-panel rounded-2xl p-6 flex flex-col items-center justify-center text-center relative overflow-hidden min-h-[320px]">
+                <!-- Outer Pulsing Ring -->
+                <div id="audio-outer-ring" class="audio-ring-outer absolute w-64 h-64 rounded-full pointer-events-none"></div>
+
+                <!-- Inner Animated Core Ring -->
+                <div id="audio-core-ring" class="audio-ring-inner w-44 h-44 rounded-full bg-slate-900/90 border-2 border-cyber-cyan flex flex-col items-center justify-center relative cursor-pointer hover:scale-105 transition-transform duration-300" onclick="toggleWakeWordListener()">
+                    <i id="cyber-core-icon" class="fa-solid fa-brain text-4xl text-cyber-cyan mb-2 transition-all duration-300"></i>
+                    <span id="cyber-core-status" class="text-xs font-mono text-slate-300 tracking-widest uppercase">CYBER IDLE</span>
+                    <span class="text-[9px] font-mono text-cyber-cyan/70 mt-1">Klik om te luisteren</span>
+                </div>
+
+                <!-- Wake Word Status Badge -->
+                <div class="mt-6 flex flex-col items-center gap-2 z-10">
+                    <div class="flex items-center gap-2 bg-slate-900/80 px-4 py-1.5 rounded-full border border-cyber-cyan/30">
+                        <span id="wake-indicator" class="w-2.5 h-2.5 rounded-full bg-slate-500"></span>
+                        <span id="wake-status-text" class="text-xs font-mono text-slate-300">Wake-word ("Hey CYBER" / "Word wakker"): <strong class="text-slate-400">UIT</strong></span>
+                    </div>
+                    <p id="speech-transcript-preview" class="text-xs text-cyber-cyan/80 font-mono italic min-h-[1.5rem] px-4 text-center">
+                        "Zeg 'Hey CYBER' of 'Word wakker' of klik op de microfoon knop"
+                    </p>
+                </div>
+
+                <!-- Quick Action Buttons -->
+                <div class="flex items-center justify-center gap-3 mt-4 w-full pt-4 border-t border-slate-800">
+                    <button onclick="toggleWebcam()" class="px-3 py-2 rounded-lg bg-slate-800/80 hover:bg-cyber-cyan/20 border border-slate-700 hover:border-cyber-cyan text-xs font-mono text-slate-300 hover:text-cyber-cyan transition flex items-center gap-2">
+                        <i class="fa-solid fa-video"></i> Camera
+                    </button>
+                    <button id="mic-toggle-btn" onclick="toggleSpeechRecognition()" class="px-4 py-2 rounded-lg bg-cyber-cyan/20 hover:bg-cyber-cyan/30 border border-cyber-cyan text-xs font-mono text-cyber-cyan font-bold transition flex items-center gap-2">
+                        <i class="fa-solid fa-microphone"></i> Spraak Modus
+                    </button>
+                    <button onclick="focusChatInput()" class="px-3 py-2 rounded-lg bg-slate-800/80 hover:bg-cyber-cyan/20 border border-slate-700 hover:border-cyber-cyan text-xs font-mono text-slate-300 hover:text-cyber-cyan transition flex items-center gap-2">
+                        <i class="fa-solid fa-keyboard"></i> Toetsenbord
+                    </button>
+                </div>
+            </div>
+
+            <!-- CODE EXECUTION & SYSTEM CONTROL PANEL -->
+            <div class="glass-panel rounded-xl p-5 flex flex-col gap-3">
+                <div class="flex items-center justify-between border-b border-slate-700/50 pb-2">
+                    <h2 class="text-xs font-mono font-bold tracking-wider text-cyber-cyan flex items-center gap-2">
+                        <i class="fa-solid fa-code"></i> CODE EXECUTION & SYSTEEMBEHEER
+                    </h2>
+                    <span class="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/30">Direct Executie Sandbox</span>
+                </div>
+
+                <!-- Quick Commands Dropdown -->
+                <div class="flex gap-2">
+                    <select id="quick-cmd-select" class="flex-1 bg-slate-900 border border-slate-700 rounded text-xs font-mono text-slate-200 px-3 py-1.5 focus:border-cyber-cyan outline-none">
+                        <option value="">-- Selecteer Systeem Commando --</option>
+                    </select>
+                    <button onclick="runSelectedSystemCommand()" class="px-4 py-1.5 rounded bg-cyber-cyan/20 hover:bg-cyber-cyan/30 border border-cyber-cyan text-xs font-mono text-cyber-cyan font-bold transition">
+                        Uitvoeren
+                    </button>
+                </div>
+
+                <!-- Python Code Editor Input -->
+                <div class="relative mt-2">
+                    <textarea id="python-code-input" rows="4" class="w-full bg-slate-950/90 border border-slate-800 rounded-lg p-3 text-xs font-mono text-emerald-400 focus:border-cyber-cyan outline-none resize-none font-mono" placeholder="# Typ Python code hier om uit te voeren op het systeem...
+import os, platform
+print(f'CYBER actief op OS: {platform.system()} {platform.release()}')"></textarea>
+                </div>
+
+                <div class="flex justify-between items-center">
+                    <button onclick="executePythonCode()" class="px-4 py-2 rounded bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500 text-xs font-mono text-emerald-300 font-bold transition flex items-center gap-2">
+                        <i class="fa-solid fa-play"></i> Voer Python Code Uit
+                    </button>
+                    <button onclick="clearCodeConsole()" class="text-xs font-mono text-slate-400 hover:text-slate-200">
+                        Wissen
+                    </button>
+                </div>
+
+                <!-- Code Console Output -->
+                <div id="code-output-container" class="mt-2 bg-black/80 rounded-lg p-3 border border-slate-800 font-mono text-[11px] text-slate-300 max-h-40 overflow-y-auto hidden">
+                    <div class="text-[10px] text-slate-500 border-b border-slate-800 pb-1 mb-1 flex justify-between">
+                        <span>CONSOLE OUTPUT</span>
+                        <span id="code-exec-time">0 ms</span>
+                    </div>
+                    <pre id="code-output-text" class="whitespace-pre-wrap font-mono"></pre>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- RECHTER KOLOM (Chat Interface - 4/12) -->
+        <section class="lg:col-span-4 flex flex-col glass-panel rounded-2xl h-[calc(100vh-6.5rem)] min-h-[550px]">
+
+            <!-- Chat Header -->
+            <div class="p-4 border-b border-slate-700/50 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-full bg-cyber-cyan/20 border border-cyber-cyan flex items-center justify-center text-cyber-cyan">
+                        <i class="fa-solid fa-robot text-sm"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-sm font-bold font-mono text-white">CYBER CHAT</h2>
+                        <span class="text-[10px] text-cyber-cyan font-mono">Context Unlocked</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-2">
+                    <button onclick="clearChatHistory()" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-red-950/60 text-slate-300 hover:text-red-400 border border-slate-700 text-xs font-mono transition" title="Wis Gesprek">
+                        Clear
+                    </button>
+                    <button onclick="extractConversation()" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-cyber-cyan/20 text-slate-300 hover:text-cyber-cyan border border-slate-700 text-xs font-mono transition" title="Exporteer Gesprek">
+                        Extract
+                    </button>
+                </div>
+            </div>
+
+            <!-- Messages List Container -->
+            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto flex flex-col gap-4 font-sans text-sm">
+
+                <!-- Initial Welcome Message from CYBER -->
+                <div class="flex gap-3 max-w-[85%] self-start">
+                    <div class="w-7 h-7 rounded-full bg-cyber-cyan/20 border border-cyber-cyan flex items-center justify-center text-cyber-cyan shrink-0 mt-1">
+                        <i class="fa-solid fa-microchip text-xs"></i>
+                    </div>
+                    <div class="bg-slate-900/90 border border-cyber-cyan/30 rounded-2xl rounded-tl-none p-3.5 text-slate-200 shadow-lg">
+                        <p class="font-mono text-xs font-bold text-cyber-cyan mb-1">CYBER</p>
+                        <p class="text-xs leading-relaxed">
+                            Goedendag! Ik ben <strong class="text-cyber-cyan">CYBER</strong>, uw AI-assistent. Ik sta voor u klaar voor spraakcommando's, visie-analyse, code-executie en systeembeheer.
+                        </p>
+                        <p class="text-[10px] text-slate-400 font-mono mt-2 border-t border-slate-800 pt-1">
+                            Tip: Zeg "Hey CYBER" of vraag mij direct een taak uit te voeren!
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Chat Input Bar -->
+            <div class="p-4 border-t border-slate-700/50 bg-slate-950/60 rounded-b-2xl">
+                <form id="chat-form" onsubmit="handleChatSubmit(event)" class="flex items-center gap-2">
+                    <input type="text" id="chat-input" class="flex-1 bg-slate-900/90 border border-slate-700 focus:border-cyber-cyan rounded-xl px-4 py-2.5 text-xs text-slate-100 placeholder-slate-500 outline-none transition font-sans" placeholder="Stuur een bericht naar CYBER..." autocomplete="off">
+
+                    <button type="button" onclick="toggleSpeechRecognition()" class="p-2.5 rounded-xl bg-slate-800 hover:bg-cyber-cyan/20 border border-slate-700 hover:border-cyber-cyan text-cyber-cyan transition">
+                        <i class="fa-solid fa-microphone text-sm"></i>
+                    </button>
+
+                    <button type="submit" class="px-4 py-2.5 rounded-xl bg-cyber-cyan text-slate-950 font-bold hover:bg-cyan-300 transition text-xs font-mono flex items-center gap-1 shadow-[0_0_15px_rgba(0,240,255,0.4)]">
+                        <span>Verzend</span>
+                        <i class="fa-solid fa-paper-plane text-xs"></i>
+                    </button>
+                </form>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- MODALS SECTION -->
+
+    <!-- SETTINGS MODAL -->
+    <div id="settings-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel max-w-lg w-full rounded-2xl p-6 border border-cyber-cyan/40 shadow-2xl relative">
+            <button onclick="closeModal('settings-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h2 class="text-lg font-mono font-bold text-cyber-cyan mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-sliders"></i> CYBER Systeem Instellingen
+            </h2>
+
+            <div class="flex flex-col gap-4 font-mono text-xs">
+                <div>
+                    <label class="block text-slate-300 mb-1">Google Gemini API Key:</label>
+                    <input type="password" id="gemini-key-input" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-slate-100 focus:border-cyber-cyan outline-none" placeholder="AIzaSy...">
+                    <span class="text-[10px] text-slate-500">Vereist voor geavanceerde LLM tekst- en visie functionaliteit.</span>
+                </div>
+
+                <div>
+                    <label class="block text-slate-300 mb-1">OpenWeatherMap API Key:</label>
+                    <input type="password" id="weather-key-input" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-slate-100 focus:border-cyber-cyan outline-none" placeholder="Optioneel voor live weer">
+                </div>
+
+                <div>
+                    <label class="block text-slate-300 mb-1">Standaard Stad voor Weer:</label>
+                    <input type="text" id="weather-city-input" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-slate-100 focus:border-cyber-cyan outline-none" value="Amsterdam">
+                </div>
+
+                <div>
+                    <label class="block text-slate-300 mb-1">Text-to-Speech Stem:</label>
+                    <select id="tts-voice-select" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-slate-100 focus:border-cyber-cyan outline-none">
+                        <option value="">Standaard Systeemstem</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mt-6 flex justify-end gap-3">
+                <button onclick="closeModal('settings-modal')" class="px-4 py-2 rounded bg-slate-800 text-slate-300 text-xs font-mono">Annuleren</button>
+                <button onclick="saveSettings()" class="px-4 py-2 rounded bg-cyber-cyan text-slate-950 font-bold text-xs font-mono">Opslaan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DOCUMENT & MEDIA TOOLS MODAL -->
+    <div id="tools-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel max-w-2xl w-full rounded-2xl p-6 border border-cyber-cyan/40 shadow-2xl relative">
+            <button onclick="closeModal('tools-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h2 class="text-lg font-mono font-bold text-cyber-cyan mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-toolbox"></i> Document & Media Tools
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- PDF Tool -->
+                <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 flex flex-col gap-3">
+                    <h3 class="text-xs font-mono font-bold text-cyber-blue flex items-center gap-2">
+                        <i class="fa-solid fa-file-pdf"></i> PDF Document Analyse
+                    </h3>
+                    <p class="text-[11px] text-slate-400">Upload een PDF-bestand om door CYBER te laten analyseren en samenvatten.</p>
+                    <input type="file" id="pdf-file-input" accept=".pdf" class="text-xs text-slate-300 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:bg-slate-800 file:text-cyber-cyan">
+                    <button onclick="uploadAndAnalyzePDF()" class="w-full py-2 bg-cyber-cyan/20 hover:bg-cyber-cyan/30 border border-cyber-cyan text-cyber-cyan rounded text-xs font-mono font-bold transition">
+                        Analyseer PDF
+                    </button>
+                </div>
+
+                <!-- YouTube Tool -->
+                <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 flex flex-col gap-3">
+                    <h3 class="text-xs font-mono font-bold text-red-400 flex items-center gap-2">
+                        <i class="fa-brands fa-youtube"></i> YouTube Samenvatter
+                    </h3>
+                    <p class="text-[11px] text-slate-400">Voer een YouTube video URL in om een geautomatiseerde samenvatting te krijgen.</p>
+                    <input type="text" id="yt-url-input" placeholder="https://www.youtube.com/watch?v=..." class="w-full bg-slate-950 border border-slate-800 rounded p-2 text-xs text-slate-100 outline-none focus:border-red-400">
+                    <button onclick="summarizeYouTubeVideo()" class="w-full py-2 bg-red-950/40 hover:bg-red-900/60 border border-red-500/50 text-red-300 rounded text-xs font-mono font-bold transition">
+                        Vat Video Samen
+                    </button>
+                </div>
+            </div>
+
+            <!-- Result Box -->
+            <div id="tool-result-box" class="mt-4 bg-black/90 p-4 rounded-xl border border-slate-800 hidden font-mono text-xs">
+                <div class="flex justify-between items-center text-slate-400 mb-2 border-b border-slate-800 pb-1">
+                    <span id="tool-result-title">Resultaat</span>
+                    <button onclick="document.getElementById('tool-result-box').classList.add('hidden')" class="text-slate-500 hover:text-white">Sluiten</button>
+                </div>
+                <div id="tool-result-content" class="text-slate-200 whitespace-pre-wrap max-h-48 overflow-y-auto"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- COMMAND ADDITION MODAL -->
+    <div id="cmd-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel max-w-lg w-full rounded-2xl p-6 border border-cyber-cyan/40 shadow-2xl relative">
+            <button onclick="closeModal('cmd-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h2 class="text-lg font-mono font-bold text-cyber-cyan mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-plus-circle"></i> Nieuw Systeem Commando Toevoegen
+            </h2>
+
+            <div class="flex flex-col gap-3 font-mono text-xs">
+                <div>
+                    <label class="block text-slate-300 mb-1">Commando Key (uniek, bijv. 'open_spotify'):</label>
+                    <input type="text" id="cmd-key-input" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-slate-100 focus:border-cyber-cyan outline-none" placeholder="open_spotify">
+                </div>
+
+                <div>
+                    <label class="block text-slate-300 mb-1">Weergavenaam:</label>
+                    <input type="text" id="cmd-name-input" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-slate-100 focus:border-cyber-cyan outline-none" placeholder="Open Spotify Applicatie">
+                </div>
+
+                <div>
+                    <label class="block text-slate-300 mb-1">Type Executie:</label>
+                    <select id="cmd-type-select" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-slate-100 focus:border-cyber-cyan outline-none">
+                        <option value="shell">Shell / Systeem Commando</option>
+                        <option value="python">Python Code Snippet</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-slate-300 mb-1">Code / Opdracht:</label>
+                    <textarea id="cmd-code-input" rows="3" class="w-full bg-slate-950 border border-slate-700 rounded p-2 text-emerald-400 focus:border-cyber-cyan outline-none font-mono" placeholder="spotify.exe of import webbrowser..."></textarea>
+                </div>
+            </div>
+
+            <div class="mt-6 flex justify-end gap-3">
+                <button onclick="closeModal('cmd-modal')" class="px-4 py-2 rounded bg-slate-800 text-slate-300 text-xs font-mono">Annuleren</button>
+                <button onclick="addNewCustomCommand()" class="px-4 py-2 rounded bg-cyber-cyan text-slate-950 font-bold text-xs font-mono">Toevoegen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CLIENT LOGIC SCRIPT -->
+    <script src="main.js"></script>
 </body>
 </html>
